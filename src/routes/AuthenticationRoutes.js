@@ -3,24 +3,25 @@ import { lazy } from 'react';
 // project imports
 import Loadable from 'ui-component/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
+import jwt from 'jwtservice/jwtService';
+import { Navigate } from 'react-router';
 
 // login option 3 routing
-const AuthLogin3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Login3')));
-const AuthRegister3 = Loadable(lazy(() => import('views/pages/authentication/authentication3/Register3')));
+const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/authentication/Login')));
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
 
+const checkLogin = (element) => {
+    return jwt.getIsLogin() !== true ? element : <Navigate to="/dashboard" replace={true} />;
+};
+
 const AuthenticationRoutes = {
-    path: '/',
-    element: <MinimalLayout />,
+    path: '/login',
+    element: checkLogin(<MinimalLayout />),
     children: [
         {
-            path: '/pages/login/login3',
-            element: <AuthLogin3 />
-        },
-        {
-            path: '/pages/register/register3',
-            element: <AuthRegister3 />
+            path: '/login',
+            element: checkLogin(<AuthLogin />)
         }
     ]
 };
