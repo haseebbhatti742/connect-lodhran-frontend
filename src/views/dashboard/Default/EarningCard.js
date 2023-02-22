@@ -20,6 +20,7 @@ import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
 
 const CardWrapper = styled(MainCard)(({ theme }) => ({
     backgroundColor: theme.palette.secondary.dark,
+    // backgroundColor: 'black',
     color: '#fff',
     overflow: 'hidden',
     position: 'relative',

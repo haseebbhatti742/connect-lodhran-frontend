@@ -9,6 +9,10 @@ import { Navigate } from 'react-router';
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
 
+//isp routes
+const AddISP = Loadable(lazy(() => import('views/isps/AddISP')));
+const ViewAllISPs = Loadable(lazy(() => import('views/isps/ViewAllISPs')));
+
 // utilities routing
 // const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
 // const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
@@ -36,6 +40,14 @@ const MainRoutes = {
         {
             path: '/dashboard/add-staff',
             element: checkLogin(<>Add Staff Component</>)
+        },
+        {
+            path: '/dashboard/add-isp',
+            element: checkLogin(<AddISP />)
+        },
+        {
+            path: '/dashboard/all-isps',
+            element: checkLogin(<ViewAllISPs />)
         }
         // {
         //     path: 'utils',

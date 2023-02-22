@@ -1,9 +1,9 @@
 // assets
-import { IconKey } from '@tabler/icons';
+import { IconUser } from '@tabler/icons';
 
 // constant
 const icons = {
-    IconKey
+    IconUser
 };
 
 // ==============================|| EXTRA staff MENU ITEMS ||============================== //
@@ -18,7 +18,7 @@ const staff = {
             id: 'add',
             title: 'Handle Staff',
             type: 'collapse',
-            icon: icons.IconKey,
+            icon: icons.IconUser,
             children: [
                 {
                     id: 'add-staff',
