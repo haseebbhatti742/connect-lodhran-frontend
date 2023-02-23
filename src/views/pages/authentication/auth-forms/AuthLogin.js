@@ -2,18 +2,7 @@ import { useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import {
-    Box,
-    Button,
-    FormControl,
-    FormHelperText,
-    IconButton,
-    InputAdornment,
-    InputLabel,
-    OutlinedInput,
-    Stack,
-    Typography
-} from '@mui/material';
+import { Box, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, Typography } from '@mui/material';
 
 // third party
 import * as Yup from 'yup';
@@ -21,13 +10,14 @@ import { Formik } from 'formik';
 
 // project imports
 import useScriptRef from 'hooks/useScriptRef';
-import AnimateButton from 'ui-component/extended/AnimateButton';
 
 // assets
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import jwt from 'jwtservice/jwtService';
 import { useNavigate } from 'react-router';
+import { THEME_COLOR_DARK } from 'utils/Constants';
+import SimpleButton from 'ui-component/SimpleButton';
 
 // ============================|| FIREBASE - LOGIN ||============================ //
 
@@ -74,7 +64,7 @@ const FirebaseLogin = ({ ...others }) => {
                     }
                 }}
             >
-                {({ errors, handleBlur, handleChange, handleSubmit, isSubmitting, touched, values }) => (
+                {({ errors, handleBlur, handleChange, handleSubmit, isValid, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
                         <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
                             <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
@@ -133,8 +123,14 @@ const FirebaseLogin = ({ ...others }) => {
                         <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={1}>
                             <Typography
                                 variant="subtitle1"
-                                color="secondary"
-                                sx={{ textDecoration: 'none', cursor: 'pointer', width: '100%', textAlign: 'right', marginTop: '10px' }}
+                                sx={{
+                                    textDecoration: 'none',
+                                    cursor: 'pointer',
+                                    width: '100%',
+                                    textAlign: 'right',
+                                    marginTop: '10px',
+                                    color: THEME_COLOR_DARK
+                                }}
                             >
                                 Forgot Password?
                             </Typography>
@@ -146,19 +142,7 @@ const FirebaseLogin = ({ ...others }) => {
                         )}
 
                         <Box sx={{ mt: 2 }}>
-                            <AnimateButton>
-                                <Button
-                                    disableElevation
-                                    disabled={isSubmitting}
-                                    fullWidth
-                                    size="large"
-                                    type="submit"
-                                    variant="contained"
-                                    color="secondary"
-                                >
-                                    Sign in
-                                </Button>
-                            </AnimateButton>
+                            <SimpleButton isValid={!isValid} title="Sign In" />
                         </Box>
                     </form>
                 )}

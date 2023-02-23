@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 // material-ui
 import { useTheme } from '@mui/material/styles';
 import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
@@ -8,8 +6,9 @@ import { Divider, Grid, Stack, Typography, useMediaQuery } from '@mui/material';
 import AuthWrapper from '../AuthWrapper';
 import AuthCardWrapper from '../AuthCardWrapper';
 import AuthLogin from '../auth-forms/AuthLogin';
-import Logo from 'ui-component/Logo';
+import Logo from '../../../../assets/images/logo2.png';
 import AuthFooter from 'ui-component/cards/AuthFooter';
+import { THEME_COLOR_DARK } from 'utils/Constants';
 
 // assets
 
@@ -28,9 +27,7 @@ const Login = () => {
                             <AuthCardWrapper>
                                 <Grid container spacing={2} alignItems="center" justifyContent="center">
                                     <Grid item sx={{ mb: 3 }}>
-                                        <Link to="#">
-                                            <Logo />
-                                        </Link>
+                                        <img src={Logo} alt="Logo" style={{ width: '150px' }} />
                                     </Grid>
                                     <Grid item xs={12}>
                                         <Grid
@@ -41,19 +38,8 @@ const Login = () => {
                                         >
                                             <Grid item>
                                                 <Stack alignItems="center" justifyContent="center" spacing={1}>
-                                                    <Typography
-                                                        color={theme.palette.secondary.main}
-                                                        gutterBottom
-                                                        variant={matchDownSM ? 'h3' : 'h2'}
-                                                    >
+                                                    <Typography color={THEME_COLOR_DARK} gutterBottom variant={matchDownSM ? 'h3' : 'h2'}>
                                                         Hi, Welcome Back
-                                                    </Typography>
-                                                    <Typography
-                                                        variant="caption"
-                                                        fontSize="16px"
-                                                        textAlign={matchDownSM ? 'center' : 'inherit'}
-                                                    >
-                                                        Enter your credentials to continue
                                                     </Typography>
                                                 </Stack>
                                             </Grid>

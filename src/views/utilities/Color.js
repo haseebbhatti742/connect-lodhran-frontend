@@ -109,7 +109,7 @@ const UIColor = () => (
                         <Grid item xs={12} sm={6} md={4} lg={2}>
                             <ColorBox
                                 bgcolor="secondary.dark"
-                                data={{ label: 'DeepPurple-600', color: '#5e35b1' }}
+                                data={{ label: 'DeepPurple-600', color: '#f07911' }}
                                 title="secondary.dark"
                             />
                         </Grid>

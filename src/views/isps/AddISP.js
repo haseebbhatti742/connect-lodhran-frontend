@@ -1,9 +1,8 @@
-import { Button, FormControl, FormHelperText, InputLabel, OutlinedInput } from '@mui/material';
+import { FormControl, FormHelperText, Grid, InputLabel, OutlinedInput } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { Formik } from 'formik';
-import React from 'react';
-import AnimateButton from 'ui-component/extended/AnimateButton';
+import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddISPValidationSchema } from '../../utils/ValidationSchemas';
 
@@ -63,18 +62,9 @@ function AddISP() {
                             )}
                         </FormControl>
                         <Box sx={{ mt: 2 }}>
-                            <AnimateButton>
-                                <Button
-                                    disableElevation
-                                    disabled={!isValid}
-                                    size="large"
-                                    type="submit"
-                                    variant="contained"
-                                    color="secondary"
-                                >
-                                    Add IPS
-                                </Button>
-                            </AnimateButton>
+                            <Grid sx={{ width: '120px' }}>
+                                <SimpleButton isValid={!isValid} title="Add IPS" />
+                            </Grid>
                         </Box>
                     </form>
                 )}
