@@ -5,7 +5,7 @@ import { gridSpacing } from 'store/constant';
 import { Grid } from '@mui/material';
 
 // project imports
-import ISPCard from 'views/dashboard/Default/ISPCard';
+import ISPCard from 'views/isps/ISPCard';
 
 const ISPS = [
     {

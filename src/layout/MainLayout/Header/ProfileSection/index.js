@@ -8,22 +8,15 @@ import { useTheme } from '@mui/material/styles';
 import {
     Avatar,
     Box,
-    // Card,
-    // CardContent,
     Chip,
     ClickAwayListener,
-    // Divider,
-    // Grid,
-    // InputAdornment,
     List,
     ListItemButton,
     ListItemIcon,
     ListItemText,
-    // OutlinedInput,
     Paper,
     Popper,
     Stack,
-    // Switch,
     Typography
 } from '@mui/material';
 
@@ -47,9 +40,6 @@ const ProfileSection = () => {
     const customization = useSelector((state) => state.customization);
     const navigate = useNavigate();
 
-    // const [sdm, setSdm] = useState(true);
-    // const [value, setValue] = useState('');
-    // const [notification, setNotification] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState(-1);
     const [open, setOpen] = useState(false);
     /**
@@ -67,15 +57,6 @@ const ProfileSection = () => {
         }
         setOpen(false);
     };
-
-    // const handleListItemClick = (event, index, route = '') => {
-    //     setSelectedIndex(index);
-    //     handleClose(event);
-
-    //     if (route && route !== '') {
-    //         navigate(route);
-    //     }
-    // };
 
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);

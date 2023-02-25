@@ -3,7 +3,7 @@ import { THEME_COLOR_DARK } from 'utils/Constants';
 import AnimateButton from './extended/AnimateButton';
 
 // eslint-disable-next-line
-function SimpleButton({ isValid, title }) {
+function SimpleButton({ isValid, title, color = THEME_COLOR_DARK }) {
     return (
         <AnimateButton>
             <Button
@@ -13,7 +13,7 @@ function SimpleButton({ isValid, title }) {
                 size="large"
                 type="submit"
                 variant="contained"
-                style={{ backgroundColor: THEME_COLOR_DARK, color: 'white' }}
+                style={{ backgroundColor: color, color: 'white' }}
             >
                 {title}
             </Button>

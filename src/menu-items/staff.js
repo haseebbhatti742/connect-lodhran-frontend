@@ -16,7 +16,7 @@ const staff = {
     children: [
         {
             id: 'add',
-            title: 'Handle Staff',
+            title: 'Manage Staff',
             type: 'collapse',
             icon: icons.IconUser,
             children: [

@@ -51,8 +51,17 @@ const FirebaseLogin = ({ ...others }) => {
                         if (scriptedRef.current) {
                             setStatus({ success: true });
                             setSubmitting(false);
-                            jwt.setIsLogin(true);
-                            navigate(0);
+                            jwt.login(values)
+                                .then((res) => {
+                                    console.log('Login Results');
+                                    console.log(res);
+                                })
+                                .catch((err) => {
+                                    console.log('Login Error');
+                                    console.log(err);
+                                });
+                            // jwt.setIsLogin(true);
+                            // navigate(0);
                         }
                     } catch (err) {
                         console.error(err);

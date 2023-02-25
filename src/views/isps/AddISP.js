@@ -1,14 +1,16 @@
 import { FormControl, FormHelperText, Grid, InputLabel, OutlinedInput } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
-import { Formik } from 'formik';
+import { Field, Formik } from 'formik';
+import { CirclePicker } from 'react-color';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddISPValidationSchema } from '../../utils/ValidationSchemas';
 
 const initialValues = {
     name: '',
-    vlan: ''
+    vlan: '',
+    color: ''
 };
 
 const onSubmit = (values) => {
@@ -23,7 +25,7 @@ function AddISP() {
         <>
             <h3>Add ISP Details</h3>
             <Formik initialValues={initialValues} validationSchema={AddISPValidationSchema} onSubmit={onSubmit}>
-                {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit }) => (
+                {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
                         <FormControl fullWidth error={Boolean(touched.name && errors.name)} sx={{ ...theme.typography.customInput }}>
                             <InputLabel> ISP Name </InputLabel>
@@ -61,9 +63,31 @@ function AddISP() {
                                 </FormHelperText>
                             )}
                         </FormControl>
+                        <div style={{ marginTop: '10px' }}>
+                            <Field name="color">
+                                {({ field, meta }) => (
+                                    <div>
+                                        <label htmlFor="color">Select a color:</label>
+                                        <CirclePicker
+                                            id="color"
+                                            name="color"
+                                            {...field}
+                                            onChange={(color) => {
+                                                setFieldValue('color', color.hex);
+                                            }}
+                                        />
+                                        {meta.touched && meta.error && (
+                                            <FormHelperText error id="standard-weight-helper-text-isp-vlan">
+                                                {meta.error}
+                                            </FormHelperText>
+                                        )}
+                                    </div>
+                                )}
+                            </Field>
+                        </div>
                         <Box sx={{ mt: 2 }}>
                             <Grid sx={{ width: '120px' }}>
-                                <SimpleButton isValid={!isValid} title="Add IPS" />
+                                <SimpleButton isValid={!isValid} title="Add ISP" />
                             </Grid>
                         </Box>
                     </form>

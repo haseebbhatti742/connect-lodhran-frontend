@@ -1,37 +1,37 @@
 // assets
-import { IconNetwork } from '@tabler/icons';
+import { IconUsers } from '@tabler/icons';
 
 // constant
 const icons = {
-    IconNetwork
+    IconUsers
 };
 
 // ==============================|| EXTRA ISP MENU ITEMS ||============================== //
 
-const isps = {
-    id: 'isps',
-    title: 'ISPs',
-    // caption: 'Handle your isps',
+const users = {
+    id: 'users',
+    title: 'users',
+    // caption: 'Handle your users',
     type: 'group',
     children: [
         {
             id: 'add',
-            title: 'Manage ISPs',
+            title: 'Manage Users',
             type: 'collapse',
-            icon: icons.IconNetwork,
+            icon: icons.IconUsers,
             children: [
                 {
-                    id: 'add-isp',
-                    title: 'Add ISP',
+                    id: 'add-user',
+                    title: 'Add User',
                     type: 'item',
-                    url: '/dashboard/add-isp',
+                    url: '/dashboard/add-user',
                     target: false
                 },
                 {
-                    id: 'all-isps',
-                    title: 'All ISPs',
+                    id: 'all-users',
+                    title: 'All Users',
                     type: 'item',
-                    url: '/dashboard/all-isps',
+                    url: '/dashboard/all-users',
                     target: false
                 }
             ]
@@ -39,4 +39,4 @@ const isps = {
     ]
 };
 
-export default isps;
+export default users;

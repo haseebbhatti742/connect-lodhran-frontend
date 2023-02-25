@@ -11,56 +11,55 @@ import SkeletonEarningCard from 'ui-component/cards/Skeleton/EarningCard';
 
 // assets
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
-import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
-import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
-import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
+import { Edit, CardGiftcard, AddBox } from '@mui/icons-material';
+import { useNavigate } from 'react-router';
 
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
+
+const CardWrapper = styled(MainCard)(({ color, theme }) => ({
+    backgroundColor: color,
+    // backgroundColor: 'black',
+    color: '#fff',
+    overflow: 'hidden',
+    position: 'relative',
+    '&:after': {
+        content: '""',
+        position: 'absolute',
+        width: 210,
+        height: 210,
+        background: '#e1e0de',
+        borderRadius: '50%',
+        top: -85,
+        right: -95,
+        [theme.breakpoints.down('sm')]: {
+            top: -105,
+            right: -140
+        }
+    },
+    '&:before': {
+        content: '""',
+        position: 'absolute',
+        width: 210,
+        height: 210,
+        background: color,
+        borderRadius: '50%',
+        top: -155,
+        right: -70,
+        opacity: 0.5,
+        [theme.breakpoints.down('sm')]: {
+            top: -155,
+            right: -70
+        }
+    }
+}));
 
 // eslint-disable-next-line
 const ISPCard = ({ isp, isLoading }) => {
     // eslint-disable-next-line
-    const { name, vlan, color, totalUsers } = isp;
-
-    const CardWrapper = styled(MainCard)(({ theme }) => ({
-        backgroundColor: color,
-        // backgroundColor: 'black',
-        color: '#fff',
-        overflow: 'hidden',
-        position: 'relative',
-        '&:after': {
-            content: '""',
-            position: 'absolute',
-            width: 210,
-            height: 210,
-            background: '#e1e0de',
-            borderRadius: '50%',
-            top: -85,
-            right: -95,
-            [theme.breakpoints.down('sm')]: {
-                top: -105,
-                right: -140
-            }
-        },
-        '&:before': {
-            content: '""',
-            position: 'absolute',
-            width: 210,
-            height: 210,
-            background: color,
-            borderRadius: '50%',
-            top: -155,
-            right: -70,
-            opacity: 0.5,
-            [theme.breakpoints.down('sm')]: {
-                top: -155,
-                right: -70
-            }
-        }
-    }));
+    const { id, name, vlan, color, totalUsers } = isp;
 
     const theme = useTheme();
+    const navigate = useNavigate();
 
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -77,7 +76,7 @@ const ISPCard = ({ isp, isLoading }) => {
             {isLoading ? (
                 <SkeletonEarningCard />
             ) : (
-                <CardWrapper border={false} content={false}>
+                <CardWrapper color={color} border={false} content={false}>
                     <Box sx={{ p: 2.25 }}>
                         <Grid container direction="column">
                             <Grid item>
@@ -117,17 +116,14 @@ const ISPCard = ({ isp, isLoading }) => {
                                                 horizontal: 'right'
                                             }}
                                         >
-                                            <MenuItem onClick={handleClose}>
-                                                <GetAppTwoToneIcon sx={{ mr: 1.75 }} /> Import Card
+                                            <MenuItem onClick={() => navigate('/dashboard/all-packages', { state: { ispId: id, color } })}>
+                                                <CardGiftcard sx={{ mr: 1.75 }} /> View Packages
                                             </MenuItem>
-                                            <MenuItem onClick={handleClose}>
-                                                <FileCopyTwoToneIcon sx={{ mr: 1.75 }} /> Copy Data
+                                            <MenuItem onClick={() => navigate('/dashboard/add-package', { state: { ispId: id, color } })}>
+                                                <AddBox sx={{ mr: 1.75 }} /> Add New Package
                                             </MenuItem>
-                                            <MenuItem onClick={handleClose}>
-                                                <PictureAsPdfTwoToneIcon sx={{ mr: 1.75 }} /> Export
-                                            </MenuItem>
-                                            <MenuItem onClick={handleClose}>
-                                                <ArchiveTwoToneIcon sx={{ mr: 1.75 }} /> Archive File
+                                            <MenuItem onClick={() => navigate('/dashboard/edit-isp')}>
+                                                <Edit sx={{ mr: 1.75 }} /> Edit ISP
                                             </MenuItem>
                                         </Menu>
                                     </Grid>

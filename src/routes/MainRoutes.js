@@ -5,6 +5,12 @@ import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import jwt from 'jwtservice/jwtService';
 import { Navigate } from 'react-router';
+import AddPackage from 'views/isps/AddPackage';
+import AllPackages from 'views/isps/AllPackages';
+import AddEntry from 'views/entries/AddEntry';
+import AllEntries from 'views/entries/AllEntries';
+import AddUser from 'views/users/AddUser';
+import AllUsers from 'views/users/AllUsers';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -48,6 +54,38 @@ const MainRoutes = {
         {
             path: '/dashboard/all-isps',
             element: checkLogin(<ViewAllISPs />)
+        },
+        {
+            path: '/dashboard/add-package',
+            element: checkLogin(<AddPackage />)
+        },
+        {
+            path: '/dashboard/all-packages',
+            element: checkLogin(<AllPackages />)
+        },
+        {
+            path: '/dashboard/edit-isp',
+            element: checkLogin(<AddPackage />)
+        },
+        {
+            path: '/dashboard/create-entry',
+            element: checkLogin(<AddEntry />)
+        },
+        {
+            path: '/dashboard/all-entries',
+            element: checkLogin(<AllEntries />)
+        },
+        {
+            path: '/dashboard/pending-entries',
+            element: checkLogin(<>Pending Entries</>)
+        },
+        {
+            path: '/dashboard/add-user',
+            element: checkLogin(<AddUser />)
+        },
+        {
+            path: '/dashboard/all-users',
+            element: checkLogin(<AllUsers />)
         }
         // {
         //     path: 'utils',
