@@ -26,6 +26,13 @@ const staff = {
                     type: 'item',
                     url: '/dashboard/add-staff',
                     target: false
+                },
+                {
+                    id: 'all-staff',
+                    title: 'All Staff',
+                    type: 'item',
+                    url: '/dashboard/all-staff',
+                    target: false
                 }
             ]
         }

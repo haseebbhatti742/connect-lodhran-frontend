@@ -14,7 +14,7 @@ import jwt from 'jwtservice/jwtService';
 
 const columns = [
     { id: 'fullname', label: 'Full Name', minWidth: 170 },
-    { id: 'userId', label: '\u00a0User ID', minWidth: 100 },
+    { id: 'email', label: '\u00a0Email', minWidth: 100 },
     {
         id: 'cnic',
         label: 'CNIC',
@@ -38,8 +38,8 @@ const columns = [
     }
 ];
 
-function createData(fullname, userId, cnic, mobile, address, action) {
-    return { fullname, userId, cnic, mobile, address, action };
+function createData(fullname, email, cnic, mobile, address) {
+    return { fullname, email, cnic, mobile, address };
 }
 
 const deletePackage = (id) => {
@@ -55,7 +55,7 @@ const DeleteButton = ({ id }) => {
     );
 };
 
-export default function AllUsers() {
+export default function AllStaff() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [rows, setRows] = useState([]);
@@ -75,21 +75,17 @@ export default function AllUsers() {
 
     useEffect(() => {
         setIsLoading(true);
-        jwt.getAllUsers()
+        jwt.getAllStaffs()
             .then((res) => {
-                console.log('Get Packages Result');
+                console.log('Get Staff Result');
                 console.log(res);
                 setIsLoading(false);
                 let rowsData = [];
-                res?.data?.map((item) =>
-                    rowsData.push(
-                        createData(item?.fullname, item?.userId, item?.cnic, item?.mobile, item?.address, <DeleteButton id={item?.id} />)
-                    )
-                );
+                res?.data?.map((item) => rowsData.push(createData(item?.fullname, item?.email, item?.cnic, item?.mobile, item?.address)));
                 setRows(rowsData);
             })
             .catch((err) => {
-                console.log('Get Packages Error');
+                console.log('Get Staffs Error');
                 console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
@@ -99,7 +95,7 @@ export default function AllUsers() {
     }, []);
 
     return (
-        <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <Paper sx={{ width: '100%', overflow: 'hidden', mt: 4 }}>
             {isLoading && <h3>Loading...!</h3>}
             {isError ? (
                 <Alert severity="error">{errorMessage}</Alert>

@@ -1,64 +1,140 @@
-import { FormControl, FormHelperText, Grid, InputLabel, Menu, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { Alert, FormControl, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { Formik } from 'formik';
-import { useLocation } from 'react-router';
+import jwt from 'jwtservice/jwtService';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router';
 import SimpleButton from 'ui-component/SimpleButton';
+import { PAYMENT_METHODS } from 'utils/Constants';
 
-import { AddPackageValidationSchema } from '../../utils/ValidationSchemas';
-
-const onSubmit = (values) => {
-    console.log('values');
-    console.log(values);
-};
+import { CreateEntryValidationSchema } from '../../utils/ValidationSchemas';
 
 function AddEntry() {
     const theme = useTheme();
+    const [isps, setIsps] = useState([]);
+    const [packages, setPackages] = useState([]);
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        setIsLoading(true);
+        jwt.getAllIsps()
+            .then((res) => {
+                console.log('All Isps Result');
+                console.log(res);
+                setIsps(res?.data);
+                setIsLoading(false);
+                setIsError(false);
+            })
+            .catch((err) => {
+                console.log('All Isps Error');
+                console.log(err);
+                setErrorMessage(err?.response?.data?.message);
+                setIsError(true);
+                setIsLoading(false);
+            });
+        // eslint-disable-next-line
+    }, []);
 
     // const { ispId, color } = useLocation().state;
     const initialValues = {
         isp: '',
-        name: '',
-        bandwidth: '',
-        rateType: '',
-        ratePerDay: '',
-        purchaseRate: '',
+        userId: '',
+        package: '',
+        paymentMethod: '',
+        tid: '',
         saleRate: '',
-        validity: ''
+        expiryDate: ''
     };
 
-    const handleRatePerDayChange = (event, setFieldValue) => {
-        const { value } = event.target;
-        setFieldValue('ratePerDay', value);
-        setFieldValue('purchaseRate', (value * 31).toFixed(2));
+    const onSubmit = (values) => {
+        console.log('values');
+        console.log(values);
+        setIsLoading(true);
+        jwt.createEntry(values)
+            .then((res) => {
+                console.log('Create Entry Result');
+                console.log(res);
+                setIsLoading(false);
+                setIsError(false);
+                alert('Entry Created');
+                navigate('/dashboard/all-entries');
+            })
+            .catch((err) => {
+                console.log('Create Entry Error');
+                console.log(err);
+                setErrorMessage(err?.response?.data?.message);
+                setIsError(true);
+                setIsLoading(false);
+            });
+    };
+
+    const handleIspSelectChange = (event, setFieldValue) => {
+        const ispId = event.target.value;
+        setFieldValue('isp', ispId);
+        getPackages(ispId);
+    };
+
+    const handlePaymentMethodChange = (event, setFieldValue) => {
+        const paymentMethod = event.target.value;
+        setFieldValue('paymentMethod', paymentMethod);
+        if (paymentMethod === 'net' || paymentMethod === 'pending') {
+            setFieldValue('tid', '');
+        }
+    };
+
+    const getPackages = (isp) => {
+        setIsLoading(true);
+        jwt.getAllPackages(isp)
+            .then((res) => {
+                console.log('All Packages Result');
+                console.log(res);
+                setPackages(res?.data);
+                setIsLoading(false);
+                setIsError(false);
+            })
+            .catch((err) => {
+                console.log('All Packages Error');
+                console.log(err);
+                setErrorMessage(err?.response?.data?.message);
+                setIsError(true);
+                setIsLoading(false);
+            });
     };
 
     return (
         <>
             <h3>Add Entry Details</h3>
-            <Formik initialValues={initialValues} validationSchema={AddPackageValidationSchema} onSubmit={onSubmit}>
+            {isLoading && <h3>Loading...!</h3>}
+            {isError && <Alert severity="error">{errorMessage}</Alert>}
+            <Formik initialValues={initialValues} validationSchema={CreateEntryValidationSchema} onSubmit={onSubmit}>
                 {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
-                        <FormControl fullWidth error={Boolean(touched.name && errors.name)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel> Select USers's ISP </InputLabel>
+                        <FormControl fullWidth error={Boolean(touched.isp && errors.isp)} sx={{ ...theme.typography.customInput }}>
+                            <InputLabel> Select User's ISP </InputLabel>
                             <Select
                                 id="isp"
-                                name="name"
+                                name="isp"
                                 type="text"
-                                value={values.name}
+                                value={values.isp}
                                 onBlur={handleBlur}
-                                onChange={handleChange}
+                                onChange={(event) => handleIspSelectChange(event, setFieldValue)}
                                 label="User's ISP"
-                                inputProps={{}}
+                                sx={{ paddingTop: '15px' }}
                             >
-                                <MenuItem>Connect</MenuItem>
-                                <MenuItem>GetLinks</MenuItem>
-                                <MenuItem>Transworld</MenuItem>
-                                <MenuItem>Wateen</MenuItem>
+                                {isps.map((isp) => (
+                                    <MenuItem value={isp.id}>{isp.name}</MenuItem>
+                                ))}
                             </Select>
-                            {touched.name && errors.name && (
+                            {touched.isp && errors.isp && (
                                 <FormHelperText error id="standard-weight-helper-text-name">
-                                    {errors.name}
+                                    {errors.isp}
                                 </FormHelperText>
                             )}
                         </FormControl>
@@ -66,23 +142,23 @@ function AddEntry() {
                             <Grid item xs={6}>
                                 <FormControl
                                     fullWidth
-                                    error={Boolean(touched.bandwidth && errors.bandwidth)}
+                                    error={Boolean(touched.userId && errors.userId)}
                                     sx={{ ...theme.typography.customInput }}
                                 >
-                                    <InputLabel> Username </InputLabel>
+                                    <InputLabel> User Id </InputLabel>
                                     <OutlinedInput
-                                        id="bandwidth"
-                                        name="bandwidth"
-                                        type="number"
-                                        value={values.bandwidth}
+                                        id="userId"
+                                        name="userId"
+                                        type="text"
+                                        value={values.userId}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        label="Username"
+                                        label="User Id"
                                         inputProps={{ min: 0 }}
                                     />
-                                    {touched.bandwidth && errors.bandwidth && (
-                                        <FormHelperText error id="standard-weight-helper-text-bandwidth">
-                                            {errors.bandwidth}
+                                    {touched.userId && errors.userId && (
+                                        <FormHelperText error id="standard-weight-helper-text-userId">
+                                            {errors.userId}
                                         </FormHelperText>
                                     )}
                                 </FormControl>
@@ -90,25 +166,29 @@ function AddEntry() {
                             <Grid item xs={6}>
                                 <FormControl
                                     fullWidth
-                                    error={Boolean(touched.rateType && errors.rateType)}
+                                    error={Boolean(touched.package && errors.package)}
                                     sx={{ ...theme.typography.customInput }}
                                 >
                                     <InputLabel> Select Package </InputLabel>
                                     <Select
-                                        id="isp"
-                                        name="name"
+                                        id="package"
+                                        name="package"
                                         type="text"
-                                        value={values.name}
+                                        value={values.package}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Select Package"
-                                        inputProps={{}}
+                                        sx={{ paddingTop: '15px' }}
                                     >
-                                        <MenuItem>2Mb</MenuItem>
-                                        <MenuItem>4Mb</MenuItem>
-                                        <MenuItem>6Mb</MenuItem>
-                                        <MenuItem>8Mb</MenuItem>
+                                        {packages.map((item) => (
+                                            <MenuItem value={item.id}>{item.name}</MenuItem>
+                                        ))}
                                     </Select>
+                                    {touched.package && errors.package && (
+                                        <FormHelperText error id="standard-weight-helper-text-package">
+                                            {errors.package}
+                                        </FormHelperText>
+                                    )}
                                 </FormControl>
                             </Grid>
                         </Grid>
@@ -116,52 +196,48 @@ function AddEntry() {
                             <Grid item xs={6}>
                                 <FormControl
                                     fullWidth
-                                    error={Boolean(touched.rateType && errors.rateType)}
+                                    error={Boolean(touched.paymentMethod && errors.paymentMethod)}
                                     sx={{ ...theme.typography.customInput }}
                                 >
                                     <InputLabel> Select Payment Method </InputLabel>
                                     <Select
-                                        id="isp"
-                                        name="name"
+                                        id="paymentMethod"
+                                        name="paymentMethod"
                                         type="text"
-                                        value={values.name}
+                                        value={values.paymentMethod}
                                         onBlur={handleBlur}
-                                        onChange={handleChange}
+                                        onChange={(event) => handlePaymentMethodChange(event, setFieldValue)}
                                         label="Select Payment Method"
-                                        inputProps={{}}
+                                        sx={{ paddingTop: '15px' }}
                                     >
-                                        <MenuItem>NET</MenuItem>
-                                        <MenuItem>Meezan Bank</MenuItem>
-                                        <MenuItem>JazzCash</MenuItem>
-                                        <MenuItem>EasyPaisa</MenuItem>
-                                        <MenuItem>U-Paisa</MenuItem>
-                                        <MenuItem>NayaPay</MenuItem>
-                                        <MenuItem>SadaPay</MenuItem>
-                                        <MenuItem>Other</MenuItem>
-                                        <MenuItem>Pending</MenuItem>
+                                        {PAYMENT_METHODS.map((item) => (
+                                            <MenuItem value={item.key}>{item.value}</MenuItem>
+                                        ))}
                                     </Select>
+                                    {touched.paymentMethod && errors.paymentMethod && (
+                                        <FormHelperText error id="standard-weight-helper-text-paymentMethod">
+                                            {errors.paymentMethod}
+                                        </FormHelperText>
+                                    )}
                                 </FormControl>
                             </Grid>
                             <Grid item xs={6}>
-                                <FormControl
-                                    fullWidth
-                                    error={Boolean(touched.purchaseRate && errors.purchaseRate)}
-                                    sx={{ ...theme.typography.customInput }}
-                                >
+                                <FormControl fullWidth error={Boolean(touched.tid && errors.tid)} sx={{ ...theme.typography.customInput }}>
                                     <InputLabel> TID </InputLabel>
                                     <OutlinedInput
-                                        id="purchaseRate"
-                                        name="purchaseRate"
-                                        type="number"
-                                        value={values.purchaseRate}
+                                        id="tid"
+                                        name="tid"
+                                        type="text"
+                                        value={values.tid}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="TID"
                                         inputProps={{ min: 0 }}
+                                        disabled={values.paymentMethod === 'net' || values.paymentMethod === 'pending'}
                                     />
-                                    {touched.purchaseRate && errors.purchaseRate && (
-                                        <FormHelperText error id="standard-weight-helper-text-purchase-rate">
-                                            {errors.purchaseRate}
+                                    {touched.tid && errors.tid && (
+                                        <FormHelperText error id="standard-weight-helper-text-tid">
+                                            {errors.tid}
                                         </FormHelperText>
                                     )}
                                 </FormControl>
@@ -184,6 +260,7 @@ function AddEntry() {
                                         onChange={handleChange}
                                         label="Sale Rate"
                                         inputProps={{ min: 0 }}
+                                        sx={{ paddingTop: '15px' }}
                                     />
                                     {touched.saleRate && errors.saleRate && (
                                         <FormHelperText error id="standard-weight-helper-text-sale-rate">
@@ -195,23 +272,23 @@ function AddEntry() {
                             <Grid item xs={6}>
                                 <FormControl
                                     fullWidth
-                                    error={Boolean(touched.validity && errors.validity)}
+                                    error={Boolean(touched.expiryDate && errors.expiryDate)}
                                     sx={{ ...theme.typography.customInput }}
                                 >
                                     <InputLabel> Expiry Date </InputLabel>
                                     <OutlinedInput
-                                        id="validity"
-                                        name="validity"
+                                        id="expiryDate"
+                                        name="expiryDate"
                                         type="date"
-                                        value={values.validity}
+                                        value={values.expiryDate}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Expriy Date"
-                                        inputProps={{}}
+                                        sx={{ paddingTop: '15px' }}
                                     />
-                                    {touched.validity && errors.validity && (
-                                        <FormHelperText error id="standard-weight-helper-text-validity">
-                                            {errors.validity}
+                                    {touched.expiryDate && errors.expiryDate && (
+                                        <FormHelperText error id="standard-weight-helper-text-expiryDate">
+                                            {errors.expiryDate}
                                         </FormHelperText>
                                     )}
                                 </FormControl>

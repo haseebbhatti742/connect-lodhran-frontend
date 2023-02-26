@@ -2,7 +2,18 @@ import { useState } from 'react';
 
 // material-ui
 import { useTheme } from '@mui/material/styles';
-import { Box, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, Typography } from '@mui/material';
+import {
+    Alert,
+    Box,
+    FormControl,
+    FormHelperText,
+    IconButton,
+    InputAdornment,
+    InputLabel,
+    OutlinedInput,
+    Stack,
+    Typography
+} from '@mui/material';
 
 // third party
 import * as Yup from 'yup';
@@ -25,8 +36,12 @@ const FirebaseLogin = ({ ...others }) => {
     const theme = useTheme();
     const scriptedRef = useScriptRef();
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const [showPassword, setShowPassword] = useState(false);
+
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -39,8 +54,8 @@ const FirebaseLogin = ({ ...others }) => {
         <>
             <Formik
                 initialValues={{
-                    email: 'info@codedthemes.com',
-                    password: '123456'
+                    email: '',
+                    password: ''
                 }}
                 validationSchema={Yup.object().shape({
                     email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
@@ -51,17 +66,27 @@ const FirebaseLogin = ({ ...others }) => {
                         if (scriptedRef.current) {
                             setStatus({ success: true });
                             setSubmitting(false);
+                            setIsLoading(true);
                             jwt.login(values)
                                 .then((res) => {
                                     console.log('Login Results');
                                     console.log(res);
+                                    setIsError(false);
+                                    setErrorMessage('');
+                                    jwt.setToken(res.data.tokens.access.token);
+                                    jwt.setRefreshToken(res.data.tokens.refresh.token);
+                                    jwt.setUser(res.data.user);
+                                    jwt.setIsLogin(true);
+                                    setIsLoading(false);
+                                    navigate(0);
                                 })
                                 .catch((err) => {
                                     console.log('Login Error');
                                     console.log(err);
+                                    setErrorMessage(err?.response?.data?.message);
+                                    setIsError(true);
+                                    setIsLoading(false);
                                 });
-                            // jwt.setIsLogin(true);
-                            // navigate(0);
                         }
                     } catch (err) {
                         console.error(err);
@@ -75,6 +100,7 @@ const FirebaseLogin = ({ ...others }) => {
             >
                 {({ errors, handleBlur, handleChange, handleSubmit, isValid, touched, values }) => (
                     <form noValidate onSubmit={handleSubmit} {...others}>
+                        {isError && <Alert severity="error">{errorMessage}</Alert>}
                         <FormControl fullWidth error={Boolean(touched.email && errors.email)} sx={{ ...theme.typography.customInput }}>
                             <InputLabel htmlFor="outlined-adornment-email-login">Email Address / Username</InputLabel>
                             <OutlinedInput
@@ -151,7 +177,7 @@ const FirebaseLogin = ({ ...others }) => {
                         )}
 
                         <Box sx={{ mt: 2 }}>
-                            <SimpleButton isValid={!isValid} title="Sign In" />
+                            <SimpleButton isValid={!isValid || isLoading} title="Sign In" />
                         </Box>
                     </form>
                 )}

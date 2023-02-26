@@ -1,8 +1,11 @@
-import { FormControl, FormHelperText, Grid, InputLabel, OutlinedInput } from '@mui/material';
+import { Alert, FormControl, FormHelperText, Grid, InputLabel, OutlinedInput } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { Field, Formik } from 'formik';
+import jwt from 'jwtservice/jwtService';
+import { useState } from 'react';
 import { CirclePicker } from 'react-color';
+import { useNavigate } from 'react-router';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddISPValidationSchema } from '../../utils/ValidationSchemas';
@@ -13,17 +16,36 @@ const initialValues = {
     color: ''
 };
 
-const onSubmit = (values) => {
-    console.log('values');
-    console.log(values);
-};
-
 function AddISP() {
     const theme = useTheme();
+    const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMssage] = useState('');
+
+    const onSubmit = (values) => {
+        setIsLoading(true);
+        jwt.createIsp(values)
+            .then((res) => {
+                console.log('Create Isp Result');
+                console.log(res);
+                setIsLoading(false);
+                alert('Isp Added');
+                navigate('/dashboard/all-isps');
+            })
+            .catch((err) => {
+                console.log('Create Isp Result');
+                console.log(err?.response?.data?.message);
+                setIsLoading(false);
+                setIsError(true);
+                setErrorMssage(err?.response?.data?.message);
+            });
+    };
 
     return (
         <>
             <h3>Add ISP Details</h3>
+            {isError && <Alert severity="error">{errorMessage}</Alert>}
             <Formik initialValues={initialValues} validationSchema={AddISPValidationSchema} onSubmit={onSubmit}>
                 {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
@@ -87,7 +109,7 @@ function AddISP() {
                         </div>
                         <Box sx={{ mt: 2 }}>
                             <Grid sx={{ width: '120px' }}>
-                                <SimpleButton isValid={!isValid} title="Add ISP" />
+                                <SimpleButton isValid={!isValid || isLoading} title="Add ISP" />
                             </Grid>
                         </Box>
                     </form>

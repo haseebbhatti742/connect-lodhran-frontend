@@ -22,53 +22,6 @@ class JwtService {
             },
             (error) => Promise.reject(error)
         );
-
-        axios.interceptors.response.use(
-            (response) => response,
-            (error) => {
-                console.log(error);
-                const { config, response } = error;
-                const originalRequest = config;
-
-                // ** if (status === 401) {
-                if (response && response.status === 401 && !originalRequest.url.includes('/auth/refreshToken')) {
-                    // ** refreshToken not needed on these urls
-                    if (originalRequest.url.includes('/auth/login')) {
-                        return Promise.reject(error);
-                    } else if (!this.isAlreadyFetchingAccessToken) {
-                        this.isAlreadyFetchingAccessToken = true;
-                        this.refreshToken()
-                            .then((r) => {
-                                console.log(`refresh response ${r}`);
-                                this.isAlreadyFetchingAccessToken = false;
-                                this.setToken(r.data.accessToken);
-                                this.setRefreshToken(r.data.refreshToken);
-                                this.onAccessTokenFetched(r.data.accessToken);
-                            })
-                            .catch((e) => {
-                                console.log(e);
-                                this.isAlreadyFetchingAccessToken = false;
-                                if (e.response.status >= 400) {
-                                    console.log('logout now');
-                                    this.removeIsLogin();
-                                    this.removeUser();
-                                    this.removeToken();
-                                    this.removeRefreshtoken();
-                                }
-                            });
-                    }
-                    const retryOriginalRequest = new Promise((resolve) => {
-                        this.addSubscriber((accessToken) => {
-                            this.isAlreadyFetchingAccessToken = false;
-                            originalRequest.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`;
-                            resolve(axios(originalRequest));
-                        });
-                    });
-                    return retryOriginalRequest;
-                }
-                return Promise.reject(error);
-            }
-        );
     }
 
     onAccessTokenFetched(accessToken) {
@@ -118,11 +71,11 @@ class JwtService {
     }
 
     setUser(value) {
-        localStorage.setItem(this.jwtConfig.storageUserKeyName, value);
+        localStorage.setItem(this.jwtConfig.storageUserKeyName, JSON.stringify(value));
     }
 
     getUser() {
-        return localStorage.getItem(this.jwtConfig.storageUserKeyName);
+        return JSON.parse(localStorage.getItem(this.jwtConfig.storageUserKeyName));
     }
 
     removeUser() {
@@ -143,6 +96,50 @@ class JwtService {
         return axios.post(this.jwtConfig.refreshEndpoint, {
             refreshToken: this.getRefreshToken()
         });
+    }
+
+    createIsp(payload) {
+        return axios.post(this.jwtConfig.ispEndpoint, payload);
+    }
+
+    getAllIsps() {
+        return axios.get(this.jwtConfig.ispEndpoint);
+    }
+
+    createPackage(payload) {
+        return axios.post(this.jwtConfig.packageEndpoint, payload);
+    }
+
+    getAllPackages(isp) {
+        return axios.get(`${this.jwtConfig.packageEndpoint}/by-isp/${isp}`);
+    }
+
+    createUser(payload) {
+        return axios.post(this.jwtConfig.userEndpoint, payload);
+    }
+
+    getAllUsers() {
+        return axios.get(this.jwtConfig.userEndpoint);
+    }
+
+    createEntry(payload) {
+        return axios.post(this.jwtConfig.entryEndpoint, payload);
+    }
+
+    getAllCompletedEntries() {
+        return axios.get(this.jwtConfig.entryEndpoint);
+    }
+
+    getAllPendingEntries() {
+        return axios.get(`${this.jwtConfig.entryEndpoint}/pending`);
+    }
+
+    addStaff(payload) {
+        return axios.post(this.jwtConfig.staffEndpoint, payload);
+    }
+
+    getAllStaffs() {
+        return axios.get(this.jwtConfig.staffEndpoint);
     }
 }
 

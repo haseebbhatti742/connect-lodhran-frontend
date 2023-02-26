@@ -25,7 +25,36 @@ export const AddPackageValidationSchema = Yup.object().shape({
 export const AddUserValidationSchema = Yup.object().shape({
     fullname: Yup.string().required('Full Name is requires'),
     userId: Yup.string().required('User Id is requires'),
-    cnic: Yup.string().required('CNIC is requires'),
-    mobile: Yup.string().required('Mobile is requires'),
-    address: Yup.string().required('Address is requires')
+    cnic: Yup.string()
+        .matches(/^\d{13}$/, 'Invalid CNIC format')
+        .required('CNIC is requires'),
+    mobile: Yup.string()
+        .matches(/^92(3)\d{10}$/, 'Invalid phone number format')
+        .required('Mobile is requires'),
+    address: Yup.string().required('Address is requires'),
+    sendWelcomeMessage: Yup.boolean().required()
+});
+
+export const AddStaffValidationSchema = Yup.object().shape({
+    fullname: Yup.string().required('Full Name is requires'),
+    cnic: Yup.string()
+        .matches(/^\d{13}$/, 'Invalid CNIC format')
+        .required('CNIC is requires'),
+    mobile: Yup.string()
+        .matches(/^92(3)\d{10}$/, 'Invalid phone number format')
+        .required('Mobile is requires'),
+    address: Yup.string().required('Address is requires'),
+    email: Yup.string().email().required('Email is required'),
+    password: Yup.string().required('Password is required'),
+    sendWelcomeMessage: Yup.boolean().required()
+});
+
+export const CreateEntryValidationSchema = Yup.object().shape({
+    isp: Yup.string().required('ISP is required'),
+    userId: Yup.string().required('User id is required'),
+    package: Yup.string().required('Package is required'),
+    paymentMethod: Yup.string().required('Payment Method id is required'),
+    tid: Yup.string(),
+    saleRate: Yup.number().required('Sale Rate is required'),
+    expiryDate: Yup.date().required('Expiry Date is required')
 });

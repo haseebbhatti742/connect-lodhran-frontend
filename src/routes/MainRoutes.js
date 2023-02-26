@@ -11,6 +11,9 @@ import AddEntry from 'views/entries/AddEntry';
 import AllEntries from 'views/entries/AllEntries';
 import AddUser from 'views/users/AddUser';
 import AllUsers from 'views/users/AllUsers';
+import PendingEntries from 'views/entries/PendingEntries';
+import AddStaff from 'views/staff/AddStaff';
+import AllStaff from 'views/staff/AllStaff';
 
 // dashboard routing
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -45,7 +48,11 @@ const MainRoutes = {
         },
         {
             path: '/dashboard/add-staff',
-            element: checkLogin(<>Add Staff Component</>)
+            element: checkLogin(<AddStaff />)
+        },
+        {
+            path: '/dashboard/all-staff',
+            element: checkLogin(<AllStaff />)
         },
         {
             path: '/dashboard/add-isp',
@@ -77,7 +84,7 @@ const MainRoutes = {
         },
         {
             path: '/dashboard/pending-entries',
-            element: checkLogin(<>Pending Entries</>)
+            element: checkLogin(<PendingEntries />)
         },
         {
             path: '/dashboard/add-user',

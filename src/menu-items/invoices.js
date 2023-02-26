@@ -1,9 +1,9 @@
 // assets
-import { IconNetwork } from '@tabler/icons';
+import { IconFileInvoice } from '@tabler/icons';
 
 // constant
 const icons = {
-    IconNetwork
+    IconFileInvoice
 };
 
 // ==============================|| EXTRA ISP MENU ITEMS ||============================== //
@@ -18,7 +18,7 @@ const invoices = {
             id: 'add',
             title: 'User Entry & Invoices',
             type: 'collapse',
-            icon: icons.IconNetwork,
+            icon: icons.IconFileInvoice,
             children: [
                 {
                     id: 'create-entry',

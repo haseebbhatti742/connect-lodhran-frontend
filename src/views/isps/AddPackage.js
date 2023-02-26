@@ -1,19 +1,21 @@
-import { FormControl, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { Alert, FormControl, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { Formik } from 'formik';
-import { useLocation } from 'react-router';
+import jwt from 'jwtservice/jwtService';
+import { useState } from 'react';
+import { useLocation, useNavigate } from 'react-router';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddPackageValidationSchema } from '../../utils/ValidationSchemas';
 
-const onSubmit = (values) => {
-    console.log('values');
-    console.log(values);
-};
-
 function AddPackage() {
     const theme = useTheme();
+    const navigate = useNavigate();
+
+    const [isLoading, setIsLoading] = useState(false);
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const { ispId, color } = useLocation().state;
     const initialValues = {
@@ -21,7 +23,7 @@ function AddPackage() {
         name: '',
         bandwidth: '',
         rateType: '',
-        ratePerDay: '',
+        ratePerDay: 0,
         purchaseRate: '',
         saleRate: '',
         validity: ''
@@ -33,9 +35,26 @@ function AddPackage() {
         setFieldValue('purchaseRate', (value * 31).toFixed(2));
     };
 
+    const onSubmit = (values) => {
+        setIsLoading(true);
+        jwt.createPackage(values)
+            .then((res) => {
+                console.log(res);
+                setIsLoading(false);
+                alert('Package Added');
+                navigate(-1);
+            })
+            .catch((err) => {
+                setErrorMessage(err?.response?.data?.message);
+                setIsError(true);
+                setIsLoading(false);
+            });
+    };
+
     return (
         <>
             <h3>Add Package Details</h3>
+            {isError && <Alert severity="error">{errorMessage}</Alert>}
             <Formik initialValues={initialValues} validationSchema={AddPackageValidationSchema} onSubmit={onSubmit}>
                 {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
@@ -200,7 +219,7 @@ function AddPackage() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Validity (In Days)"
-                                        inputProps={{}}
+                                        inputProps={{ min: 0 }}
                                     />
                                     {touched.validity && errors.validity && (
                                         <FormHelperText error id="standard-weight-helper-text-validity">
@@ -212,7 +231,7 @@ function AddPackage() {
                         </Grid>
                         <Box sx={{ mt: 2 }}>
                             <Grid sx={{ width: '100%' }}>
-                                <SimpleButton isValid={!isValid} title="Add Package" color={color} />
+                                <SimpleButton isValid={!isValid || isLoading} title="Add Package" color={color} />
                             </Grid>
                         </Box>
                     </form>

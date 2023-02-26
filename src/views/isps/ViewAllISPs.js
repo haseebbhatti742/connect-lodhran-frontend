@@ -6,54 +6,49 @@ import { Grid } from '@mui/material';
 
 // project imports
 import ISPCard from 'views/isps/ISPCard';
-
-const ISPS = [
-    {
-        id: 1,
-        name: 'GetLinks',
-        vlan: 150,
-        totalUsers: 1500,
-        color: '#00b050'
-    },
-    {
-        id: 2,
-        name: 'Connect',
-        vlan: 160,
-        totalUsers: 3000,
-        color: '#ffa500'
-    },
-    {
-        id: 3,
-        name: 'Transworld',
-        vlan: 170,
-        totalUsers: 900,
-        color: '#4472c4'
-    },
-    {
-        id: 4,
-        name: 'Wateen',
-        vlan: 180,
-        totalUsers: 2100,
-        color: '#70ad47'
-    }
-];
+import jwt from 'jwtservice/jwtService';
 
 function ViewAllISPs() {
+    const [isps, setIsps] = useState([]);
     const [isLoading, setLoading] = useState(true);
+    const [isError, setIsError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
-        setLoading(false);
+        setLoading(true);
+        jwt.getAllIsps()
+            .then((res) => {
+                console.log('Isps Result');
+                console.log(res);
+                setIsps(res?.data);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log('Isps Error');
+                console.log(err?.response?.data?.message);
+                setErrorMessage(err?.response?.data?.message);
+                setIsError(true);
+                setLoading(false);
+            });
     }, []);
 
     return (
         <Grid container spacing={gridSpacing}>
             <Grid item xs={12}>
                 <Grid container spacing={gridSpacing}>
-                    {ISPS.map((isp, index) => (
+                    {isError ? (
                         <Grid item lg={4} md={4} sm={4} xs={12}>
-                            <ISPCard key={index} isp={isp} isLoading={isLoading} />
+                            <h3 style={{ color: 'black' }}>{errorMessage}</h3>
                         </Grid>
-                    ))}
+                    ) : (
+                        <>
+                            {isps.map((isp, index) => (
+                                <Grid item lg={4} md={4} sm={4} xs={12}>
+                                    <ISPCard key={index} isp={isp} isLoading={isLoading} />
+                                </Grid>
+                            ))}
+                        </>
+                    )}
                     {/* <Grid item lg={4} md={6} sm={6} xs={12}>
                         <TotalOrderLineChartCard isLoading={isLoading} />
                     </Grid>
