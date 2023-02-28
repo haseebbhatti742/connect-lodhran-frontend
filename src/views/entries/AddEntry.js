@@ -87,6 +87,9 @@ function AddEntry() {
         if (paymentMethod === 'net' || paymentMethod === 'pending') {
             setFieldValue('tid', '');
         }
+        if (paymentMethod === 'pending') {
+            setFieldValue('saleRate', 0);
+        }
     };
 
     const getPackages = (isp) => {
@@ -261,6 +264,7 @@ function AddEntry() {
                                         label="Sale Rate"
                                         inputProps={{ min: 0 }}
                                         sx={{ paddingTop: '15px' }}
+                                        disabled={values.paymentMethod === 'pending'}
                                     />
                                     {touched.saleRate && errors.saleRate && (
                                         <FormHelperText error id="standard-weight-helper-text-sale-rate">

@@ -32,33 +32,30 @@ const columns = [
         format: (value) => value.toLocaleString('en-US')
     },
     {
-        id: 'tid',
-        label: 'TID',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'saleRate',
-        label: 'Sale Rate',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toFixed(2)
-    },
-    {
         id: 'expiryDate',
         label: 'Expiry Date',
+        minWidth: 170,
+        align: 'right',
+        format: (value) => value.toFixed(2)
+    },
+    {
+        id: 'action',
+        label: 'Action',
         minWidth: 170,
         align: 'right',
         format: (value) => value.toFixed(2)
     }
 ];
 
-function createData(isp, userId, packageName, paymentMethod, tid, saleRate, expiryDate) {
-    return { isp, userId, packageName, paymentMethod, tid, saleRate, expiryDate };
+function createData(isp, userId, packageName, paymentMethod, expiryDate, action) {
+    return { isp, userId, packageName, paymentMethod, expiryDate, action };
 }
 
 const deletePackage = (id) => {
+    console.log(id);
+};
+
+const completePayment = (id) => {
     console.log(id);
 };
 
@@ -67,6 +64,14 @@ const DeleteButton = ({ id }) => {
     return (
         <Button variant="contained" color="error" onClick={() => deletePackage(id)}>
             Delete
+        </Button>
+    );
+};
+
+const CompletePaymentButton = ({ id }) => {
+    return (
+        <Button variant="contained" color="warning" onClick={() => completePayment(id)}>
+            Pay
         </Button>
     );
 };
@@ -101,9 +106,8 @@ export default function PendingEntries() {
                             item?.userId,
                             item?.package?.name,
                             getPaymentMethodNameByKey(item?.paymentMethod),
-                            item?.tid,
-                            item?.saleRate,
-                            moment(item?.expiryDate).format('DD/MM/YYYY')
+                            moment(item?.expiryDate).format('DD/MM/YYYY'),
+                            <CompletePaymentButton id={item?.id} />
                         )
                     )
                 );

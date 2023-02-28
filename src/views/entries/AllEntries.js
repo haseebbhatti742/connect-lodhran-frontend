@@ -15,6 +15,7 @@ import moment from 'moment';
 import { getPaymentMethodNameByKey } from 'utils/Functions';
 
 const columns = [
+    { id: 'sr', label: 'Sr.', minWidth: 170 },
     { id: 'isp', label: 'Isp', minWidth: 170 },
     { id: 'userId', label: '\u00a0User Id', minWidth: 100 },
     {
@@ -54,8 +55,8 @@ const columns = [
     }
 ];
 
-function createData(isp, userId, packageName, paymentMethod, tid, saleRate, expiryDate) {
-    return { isp, userId, packageName, paymentMethod, tid, saleRate, expiryDate };
+function createData(sr, isp, userId, packageName, paymentMethod, tid, saleRate, expiryDate) {
+    return { sr, isp, userId, packageName, paymentMethod, tid, saleRate, expiryDate };
 }
 
 const deletePackage = (id) => {
@@ -94,9 +95,10 @@ export default function AllEntries() {
         jwt.getAllCompletedEntries()
             .then((res) => {
                 let rowsData = [];
-                res?.data?.map((item) =>
+                res?.data?.map((item, index) =>
                     rowsData.push(
                         createData(
+                            index + 1,
                             item?.isp?.name,
                             item?.userId,
                             item?.package?.name,

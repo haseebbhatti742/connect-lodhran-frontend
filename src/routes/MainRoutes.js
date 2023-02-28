@@ -1,36 +1,23 @@
 import { lazy } from 'react';
 
 // project imports
-import MainLayout from 'layout/MainLayout';
 import Loadable from 'ui-component/Loadable';
 import jwt from 'jwtservice/jwtService';
 import { Navigate } from 'react-router';
-import AddPackage from 'views/isps/AddPackage';
-import AllPackages from 'views/isps/AllPackages';
-import AddEntry from 'views/entries/AddEntry';
-import AllEntries from 'views/entries/AllEntries';
-import AddUser from 'views/users/AddUser';
-import AllUsers from 'views/users/AllUsers';
-import PendingEntries from 'views/entries/PendingEntries';
-import AddStaff from 'views/staff/AddStaff';
-import AllStaff from 'views/staff/AllStaff';
 
-// dashboard routing
+const MainLayout = Loadable(lazy(() => import('layout/MainLayout')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
-
-//isp routes
 const AddISP = Loadable(lazy(() => import('views/isps/AddISP')));
 const ViewAllISPs = Loadable(lazy(() => import('views/isps/ViewAllISPs')));
-
-// utilities routing
-// const UtilsTypography = Loadable(lazy(() => import('views/utilities/Typography')));
-// const UtilsColor = Loadable(lazy(() => import('views/utilities/Color')));
-// const UtilsShadow = Loadable(lazy(() => import('views/utilities/Shadow')));
-// const UtilsMaterialIcons = Loadable(lazy(() => import('views/utilities/MaterialIcons')));
-// const UtilsTablerIcons = Loadable(lazy(() => import('views/utilities/TablerIcons')));
-
-// sample page routing
-// const SamplePage = Loadable(lazy(() => import('views/sample-page')));
+const AddPackage = Loadable(lazy(() => import('views/isps/AddPackage')));
+const AllPackages = Loadable(lazy(() => import('views/isps/AllPackages')));
+const AddEntry = Loadable(lazy(() => import('views/entries/AddEntry')));
+const AllEntries = Loadable(lazy(() => import('views/entries/AllEntries')));
+const AddUser = Loadable(lazy(() => import('views/users/AddUser')));
+const AllUsers = Loadable(lazy(() => import('views/users/AllUsers')));
+const PendingEntries = Loadable(lazy(() => import('views/entries/PendingEntries')));
+const AddStaff = Loadable(lazy(() => import('views/staff/AddStaff')));
+const AllStaff = Loadable(lazy(() => import('views/staff/AllStaff')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -94,55 +81,6 @@ const MainRoutes = {
             path: '/dashboard/all-users',
             element: checkLogin(<AllUsers />)
         }
-        // {
-        //     path: 'utils',
-        //     children: [
-        //         {
-        //             path: 'util-typography',
-        //             element: <UtilsTypography />
-        //         }
-        //     ]
-        // },
-        // {
-        //     path: 'utils',
-        //     children: [
-        //         {
-        //             path: 'util-color',
-        //             element: <UtilsColor />
-        //         }
-        //     ]
-        // },
-        // {
-        //     path: 'utils',
-        //     children: [
-        //         {
-        //             path: 'util-shadow',
-        //             element: <UtilsShadow />
-        //         }
-        //     ]
-        // },
-        // {
-        //     path: 'icons',
-        //     children: [
-        //         {
-        //             path: 'tabler-icons',
-        //             element: <UtilsTablerIcons />
-        //         }
-        //     ]
-        // },
-        // {
-        //     path: 'icons',
-        //     children: [
-        //         {
-        //             path: 'material-icons',
-        //             element: <UtilsMaterialIcons />
-        //         }
-        //     ]
-        // },
-        // {
-        //     path: 'sample-page',
-        //     element: <SamplePage />
-        // }
     ]
 };
 

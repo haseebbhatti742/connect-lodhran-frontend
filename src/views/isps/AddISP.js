@@ -13,6 +13,7 @@ import { AddISPValidationSchema } from '../../utils/ValidationSchemas';
 const initialValues = {
     name: '',
     vlan: '',
+    openingBalance: '',
     color: ''
 };
 
@@ -77,11 +78,33 @@ function AddISP() {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 label="ISP VLAN"
-                                inputProps={{}}
+                                inputProps={{ min: 0 }}
                             />
                             {touched.vlan && errors.vlan && (
                                 <FormHelperText error id="standard-weight-helper-text-isp-vlan">
                                     {errors.vlan}
+                                </FormHelperText>
+                            )}
+                        </FormControl>
+                        <FormControl
+                            fullWidth
+                            error={Boolean(touched.openingBalance && errors.openingBalance)}
+                            sx={{ ...theme.typography.customInput }}
+                        >
+                            <InputLabel> Opening Balance </InputLabel>
+                            <OutlinedInput
+                                id="openingBalance"
+                                name="openingBalance"
+                                type="number"
+                                value={values.openingBalance}
+                                onBlur={handleBlur}
+                                onChange={handleChange}
+                                label="Opening Balance"
+                                inputProps={{ min: 0 }}
+                            />
+                            {touched.openingBalance && errors.openingBalance && (
+                                <FormHelperText error id="standard-weight-helper-text-isp-openingBalance">
+                                    {errors.openingBalance}
                                 </FormHelperText>
                             )}
                         </FormControl>

@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 export const AddISPValidationSchema = Yup.object().shape({
     name: Yup.string().required('ISP name is required'),
     vlan: Yup.number().required('VLAN is requried'),
+    openingBalance: Yup.number().required('Opening Balance is requried'),
     color: Yup.string().required('Color is requried')
 });
 
@@ -55,6 +56,6 @@ export const CreateEntryValidationSchema = Yup.object().shape({
     package: Yup.string().required('Package is required'),
     paymentMethod: Yup.string().required('Payment Method id is required'),
     tid: Yup.string(),
-    saleRate: Yup.number().required('Sale Rate is required'),
+    saleRate: Yup.number(),
     expiryDate: Yup.date().required('Expiry Date is required')
 });

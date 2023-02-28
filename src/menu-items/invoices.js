@@ -40,6 +40,13 @@ const invoices = {
                     type: 'item',
                     url: '/dashboard/pending-entries',
                     target: false
+                },
+                {
+                    id: 'invoice',
+                    title: 'Invoices',
+                    type: 'item',
+                    url: '/dashboard/invoices',
+                    target: false
                 }
             ]
         }

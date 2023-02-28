@@ -56,7 +56,7 @@ const CardWrapper = styled(MainCard)(({ color, theme }) => ({
 // eslint-disable-next-line
 const ISPCard = ({ isp, isLoading }) => {
     // eslint-disable-next-line
-    const { id, name, vlan, color, totalUsers } = isp;
+    const { id, name, vlan, color, openingBalance } = isp;
 
     const theme = useTheme();
     const navigate = useNavigate();
@@ -153,7 +153,7 @@ const ISPCard = ({ isp, isLoading }) => {
                                         color: 'white'
                                     }}
                                 >
-                                    Total Users: {totalUsers}
+                                    Balance: {openingBalance}
                                 </Typography>
                             </Grid>
                         </Grid>
