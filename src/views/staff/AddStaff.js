@@ -13,6 +13,7 @@ function AddStaff() {
     const theme = useTheme();
     const navigate = useNavigate();
 
+    // eslint-disable-next-line
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');

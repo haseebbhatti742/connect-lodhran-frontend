@@ -29,7 +29,7 @@ export const AddUserValidationSchema = Yup.object().shape({
         .matches(/^\d{13}$/, 'Invalid CNIC format')
         .required('CNIC is requires'),
     mobile: Yup.string()
-        .matches(/^92(3)\d{10}$/, 'Invalid phone number format')
+        .matches(/^92(3)\d{9}$/, 'Invalid phone number format')
         .required('Mobile is requires'),
     address: Yup.string().required('Address is requires'),
     sendWelcomeMessage: Yup.boolean().required()
@@ -41,7 +41,7 @@ export const AddStaffValidationSchema = Yup.object().shape({
         .matches(/^\d{13}$/, 'Invalid CNIC format')
         .required('CNIC is requires'),
     mobile: Yup.string()
-        .matches(/^92(3)\d{10}$/, 'Invalid phone number format')
+        .matches(/^92(3)\d{9}$/, 'Invalid phone number format')
         .required('Mobile is requires'),
     address: Yup.string().required('Address is requires'),
     email: Yup.string().email().required('Email is required'),

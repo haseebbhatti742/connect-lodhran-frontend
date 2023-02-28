@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { THEME_COLOR_DARK, THEME_COLOR_LIGHT, THEME_COLOR_TINT } from '../../utils/Constants';
+import { THEME_COLOR_DARK, THEME_COLOR_LIGHT } from '../../utils/Constants';
 import { useLocation } from 'react-router';
 import { Alert, Button } from '@mui/material';
 import { useState } from 'react';
