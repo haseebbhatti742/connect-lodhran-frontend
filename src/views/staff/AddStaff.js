@@ -5,6 +5,7 @@ import { Field, Formik } from 'formik';
 import jwt from 'jwtservice/jwtService';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddStaffValidationSchema } from '../../utils/ValidationSchemas';
@@ -36,7 +37,7 @@ function AddStaff() {
             .then((res) => {
                 console.log(res);
                 setIsLoading(false);
-                alert('Staff Added');
+                toast.success('Staff Added');
                 navigate(-1);
             })
             .catch((err) => {

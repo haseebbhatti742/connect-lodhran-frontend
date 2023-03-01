@@ -1,11 +1,12 @@
 import { Alert, FormControl, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
-import { Formik } from 'formik';
+import { Field, Formik } from 'formik';
 import jwt from 'jwtservice/jwtService';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
 import { PAYMENT_METHODS } from 'utils/Constants';
 
@@ -63,7 +64,7 @@ function AddEntry() {
                 console.log(res);
                 setIsLoading(false);
                 setIsError(false);
-                alert('Entry Created');
+                toast.success('Entry Created');
                 navigate('/dashboard/all-entries');
             })
             .catch((err) => {
@@ -298,6 +299,10 @@ function AddEntry() {
                                 </FormControl>
                             </Grid>
                         </Grid>
+                        <label htmlFor="sendWelcomeMessage">
+                            <Field id="sendWelcomeMessage" name="sendWelcomeMessage" type="checkbox" checked={values.sendWelcomeMessage} />
+                            Send SMS SLert
+                        </label>
                         <Box sx={{ mt: 2 }}>
                             <Grid sx={{ width: '100%' }}>
                                 <SimpleButton isValid={!isValid} title="Add Package" />

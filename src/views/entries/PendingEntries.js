@@ -13,6 +13,7 @@ import { useEffect } from 'react';
 import jwt from 'jwtservice/jwtService';
 import moment from 'moment';
 import { getPaymentMethodNameByKey } from 'utils/Functions';
+import { useNavigate } from 'react-router';
 
 const columns = [
     { id: 'isp', label: 'Isp', minWidth: 170 },
@@ -51,32 +52,8 @@ function createData(isp, userId, packageName, paymentMethod, expiryDate, action)
     return { isp, userId, packageName, paymentMethod, expiryDate, action };
 }
 
-const deletePackage = (id) => {
-    console.log(id);
-};
-
-const completePayment = (id) => {
-    console.log(id);
-};
-
-// eslint-disable-next-line
-const DeleteButton = ({ id }) => {
-    return (
-        <Button variant="contained" color="error" onClick={() => deletePackage(id)}>
-            Delete
-        </Button>
-    );
-};
-
-const CompletePaymentButton = ({ id }) => {
-    return (
-        <Button variant="contained" color="warning" onClick={() => completePayment(id)}>
-            Pay
-        </Button>
-    );
-};
-
 export default function PendingEntries() {
+    const navigate = useNavigate();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [rows, setRows] = useState([]);
@@ -95,6 +72,10 @@ export default function PendingEntries() {
     };
 
     useEffect(() => {
+        getEntry();
+    }, []);
+
+    const getEntry = () => {
         setIsLoading(true);
         jwt.getAllPendingEntries()
             .then((res) => {
@@ -120,7 +101,33 @@ export default function PendingEntries() {
                 setIsError(true);
                 setIsLoading(false);
             });
-    }, []);
+    };
+
+    const deletePackage = (id) => {
+        console.log(id);
+    };
+
+    const completePayment = (id) => {
+        navigate(`/dashboard/complete-payment/${id}`);
+    };
+
+    // eslint-disable-next-line
+    const DeleteButton = ({ id }) => {
+        return (
+            <Button variant="contained" color="error" onClick={() => deletePackage(id)}>
+                Delete
+            </Button>
+        );
+    };
+
+    // eslint-disable-next-line
+    const CompletePaymentButton = ({ id }) => {
+        return (
+            <Button variant="contained" color="warning" onClick={() => completePayment(id)}>
+                Pay
+            </Button>
+        );
+    };
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden', mt: 4 }}>

@@ -6,6 +6,7 @@ import jwt from 'jwtservice/jwtService';
 import { useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddISPValidationSchema } from '../../utils/ValidationSchemas';
@@ -31,7 +32,7 @@ function AddISP() {
                 console.log('Create Isp Result');
                 console.log(res);
                 setIsLoading(false);
-                alert('Isp Added');
+                toast.success('Isp Added');
                 navigate('/dashboard/all-isps');
             })
             .catch((err) => {

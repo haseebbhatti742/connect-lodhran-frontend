@@ -5,6 +5,7 @@ import { Field, Formik } from 'formik';
 import jwt from 'jwtservice/jwtService';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
+import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddUserValidationSchema } from '../../utils/ValidationSchemas';
@@ -19,6 +20,7 @@ function AddUser() {
 
     const initialValues = {
         fullname: '',
+        email: '',
         userId: '',
         cnic: '',
         mobile: '',
@@ -32,12 +34,12 @@ function AddUser() {
         setIsLoading(true);
         jwt.createUser(values)
             .then((res) => {
-                console.log(res);
                 setIsLoading(false);
-                alert('User Added');
+                toast.success('User Added');
                 navigate(-1);
             })
             .catch((err) => {
+                toast.error(err?.response?.data?.message);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
@@ -51,27 +53,55 @@ function AddUser() {
             <Formik initialValues={initialValues} validationSchema={AddUserValidationSchema} onSubmit={onSubmit}>
                 {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
-                        <FormControl
-                            fullWidth
-                            error={Boolean(touched.fullname && errors.fullname)}
-                            sx={{ ...theme.typography.customInput }}
-                        >
-                            <InputLabel> Full Name </InputLabel>
-                            <OutlinedInput
-                                id="fullname"
-                                name="fullname"
-                                type="text"
-                                value={values.fullname}
-                                onBlur={handleBlur}
-                                onChange={handleChange}
-                                label="Full Name"
-                            />
-                            {touched.fullname && errors.fullname && (
-                                <FormHelperText error id="standard-weight-helper-text-name">
-                                    {errors.fullname}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
+                        <Grid container spacing={2}>
+                            <Grid item xs={6}>
+                                <FormControl
+                                    fullWidth
+                                    error={Boolean(touched.fullname && errors.fullname)}
+                                    sx={{ ...theme.typography.customInput }}
+                                >
+                                    <InputLabel> Full Name </InputLabel>
+                                    <OutlinedInput
+                                        id="fullname"
+                                        name="fullname"
+                                        type="text"
+                                        value={values.fullname}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        label="Full Name"
+                                    />
+                                    {touched.fullname && errors.fullname && (
+                                        <FormHelperText error id="standard-weight-helper-text-name">
+                                            {errors.fullname}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={6}>
+                                <FormControl
+                                    fullWidth
+                                    error={Boolean(touched.email && errors.email)}
+                                    sx={{ ...theme.typography.customInput }}
+                                >
+                                    <InputLabel> Email </InputLabel>
+                                    <OutlinedInput
+                                        id="email"
+                                        name="email"
+                                        type="text"
+                                        value={values.email}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        label="Email"
+                                    />
+                                    {touched.email && errors.email && (
+                                        <FormHelperText error id="standard-weight-helper-text-name">
+                                            {errors.email}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+
                         <Grid container spacing={2}>
                             <Grid item xs={6}>
                                 <FormControl

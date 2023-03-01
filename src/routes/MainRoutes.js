@@ -4,6 +4,7 @@ import { lazy } from 'react';
 import Loadable from 'ui-component/Loadable';
 import jwt from 'jwtservice/jwtService';
 import { Navigate } from 'react-router';
+import CompletePayment from 'views/entries/CompletePayment';
 
 const MainLayout = Loadable(lazy(() => import('layout/MainLayout')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -72,6 +73,10 @@ const MainRoutes = {
         {
             path: '/dashboard/pending-entries',
             element: checkLogin(<PendingEntries />)
+        },
+        {
+            path: '/dashboard/complete-payment/:id',
+            element: checkLogin(<CompletePayment />)
         },
         {
             path: '/dashboard/add-user',

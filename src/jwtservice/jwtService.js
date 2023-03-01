@@ -126,6 +126,14 @@ class JwtService {
         return axios.post(this.jwtConfig.entryEndpoint, payload);
     }
 
+    updateEntry(id, payload) {
+        return axios.patch(`${this.jwtConfig.entryEndpoint}/${id}`, payload);
+    }
+
+    getEntryById(id) {
+        return axios.get(`${this.jwtConfig.entryEndpoint}/${id}`);
+    }
+
     getAllCompletedEntries() {
         return axios.get(this.jwtConfig.entryEndpoint);
     }

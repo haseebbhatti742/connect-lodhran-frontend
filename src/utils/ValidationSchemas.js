@@ -25,6 +25,7 @@ export const AddPackageValidationSchema = Yup.object().shape({
 
 export const AddUserValidationSchema = Yup.object().shape({
     fullname: Yup.string().required('Full Name is requires'),
+    email: Yup.string().email(),
     userId: Yup.string().required('User Id is requires'),
     cnic: Yup.string()
         .matches(/^\d{13}$/, 'Invalid CNIC format')

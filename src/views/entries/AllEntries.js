@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Alert, Button, MenuItem, OutlinedInput, Select } from '@mui/material';
+import { Alert, Button, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { THEME_COLOR_LIGHT } from 'utils/Constants';
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -77,6 +77,8 @@ export default function AllEntries() {
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [rows, setRows] = useState([]);
 
+    const [isps, setIsps] = useState([]);
+    const [ispSelected, setIspSelected] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -91,6 +93,11 @@ export default function AllEntries() {
     };
 
     useEffect(() => {
+        getEntries();
+        getIsps();
+    }, []);
+
+    const getEntries = () => {
         setIsLoading(true);
         jwt.getAllCompletedEntries()
             .then((res) => {
@@ -118,16 +125,58 @@ export default function AllEntries() {
                 setIsError(true);
                 setIsLoading(false);
             });
-    }, []);
+    };
+
+    const getIsps = () => {
+        jwt.getAllIsps()
+            .then((res) => {
+                console.log('All Isps Result');
+                console.log(res);
+                setIsps(res?.data);
+                setIsLoading(false);
+                setIsError(false);
+            })
+            .catch((err) => {
+                console.log('All Isps Error');
+                console.log(err);
+                setErrorMessage(err?.response?.data?.message);
+                setIsError(true);
+                setIsLoading(false);
+            });
+    };
 
     return (
         <>
-            <OutlinedInput id="validity" name="validity" type="date" label="Date" inputProps={{}} />
-            <OutlinedInput id="validity" name="validity" type="date" label="Date" inputProps={{}} />
-            <Select label="Type">
-                <MenuItem>Completed</MenuItem>
-                <MenuItem>Pending</MenuItem>
-            </Select>
+            <form>
+                <Grid container spacing={2} sx={{ mb: 2 }}>
+                    <Grid item xs={6}>
+                        <InputLabel> Select Start Date </InputLabel>
+                        <OutlinedInput id="validity" name="validity" type="date" label="Date" inputProps={{}} sx={{ mr: 2 }} />
+                    </Grid>
+                    <Grid item xs={6}>
+                        <InputLabel> Select End Date </InputLabel>
+                        <OutlinedInput id="validity" name="validity" type="date" label="Date" inputProps={{}} sx={{ mr: 2 }} />
+                    </Grid>
+                </Grid>
+
+                <FormControl sx={{ width: '100%' }}>
+                    <InputLabel> Select ISP </InputLabel>
+                    <Select
+                        id="isp"
+                        name="isp"
+                        type="text"
+                        value={ispSelected}
+                        onChange={(event) => setIspSelected(event.target.value)}
+                        label="Select ISP"
+                        sx={{ paddingTop: '15px' }}
+                    >
+                        <MenuItem value="Wateen">Wateen</MenuItem>
+                        {isps.map((isp) => (
+                            <MenuItem value={isp.id}>{isp.name}</MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+            </form>
             <Paper sx={{ width: '100%', overflow: 'hidden', mt: 5 }}>
                 {isLoading && <h3>Loading...!</h3>}
                 {isError ? (
