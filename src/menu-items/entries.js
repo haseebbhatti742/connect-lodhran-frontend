@@ -8,30 +8,37 @@ const icons = {
 
 // ==============================|| EXTRA ISP MENU ITEMS ||============================== //
 
-const invoices = {
-    id: 'invoices',
-    title: 'Invoices',
+const entries = {
+    id: 'entries',
+    title: 'entries',
     // caption: 'Handle your invoices',
     type: 'group',
     children: [
         {
             id: 'add',
-            title: 'Invoice Entry',
+            title: 'User Entry',
             type: 'collapse',
             icon: icons.IconFileInvoice,
             children: [
                 {
-                    id: 'invoice',
-                    title: 'Send Invoice',
+                    id: 'create-entry',
+                    title: 'Create Entry',
                     type: 'item',
-                    url: '/dashboard/send-invoice',
+                    url: '/dashboard/create-entry',
                     target: false
                 },
                 {
-                    id: 'invoice',
-                    title: 'Invoices',
+                    id: 'all-entries',
+                    title: 'All Entries',
                     type: 'item',
-                    url: '/dashboard/all-invoices',
+                    url: '/dashboard/all-entries',
+                    target: false
+                },
+                {
+                    id: 'pending-entries',
+                    title: 'Pending Entries',
+                    type: 'item',
+                    url: '/dashboard/pending-entries',
                     target: false
                 }
             ]
@@ -39,4 +46,4 @@ const invoices = {
     ]
 };
 
-export default invoices;
+export default entries;

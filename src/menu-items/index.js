@@ -1,4 +1,5 @@
 import dashboard from './dashboard';
+import entries from './entries';
 import invoices from './invoices';
 import isps from './isps';
 // import pages from './pages';
@@ -9,7 +10,7 @@ import users from './users';
 
 const menuItems = {
     // items: [dashboard, pages, utilities, other]
-    items: [dashboard, isps, staff, users, invoices]
+    items: [dashboard, isps, staff, users, entries, invoices]
 };
 
 export default menuItems;

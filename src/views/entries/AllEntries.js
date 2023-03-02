@@ -49,6 +49,13 @@ const columns = [
         format: (value) => value.toFixed(2)
     },
     {
+        id: 'purchaseRate',
+        label: 'Purchase Rate',
+        minWidth: 170,
+        align: 'left',
+        format: (value) => value.toFixed(2)
+    },
+    {
         id: 'expiryDate',
         label: 'Expiry Date',
         minWidth: 170,
@@ -57,8 +64,8 @@ const columns = [
     }
 ];
 
-function createData(sr, isp, userId, packageName, paymentMethod, tid, saleRate, expiryDate) {
-    return { sr, isp, userId, packageName, paymentMethod, tid, saleRate, expiryDate };
+function createData(sr, isp, userId, packageName, paymentMethod, tid, saleRate, purchaseRate, expiryDate) {
+    return { sr, isp, userId, packageName, paymentMethod, tid, saleRate, purchaseRate, expiryDate };
 }
 
 const deletePackage = (id) => {
@@ -129,6 +136,7 @@ export default function AllEntries() {
                             getPaymentMethodNameByKey(item?.paymentMethod),
                             item?.tid,
                             item?.saleRate,
+                            item?.package?.purchaseRate,
                             moment(item?.expiryDate).format('DD/MM/YYYY')
                         )
                     )
@@ -200,7 +208,6 @@ export default function AllEntries() {
                                 value={ispSelected}
                                 onChange={(event) => setIspSelected(event.target.value)}
                                 label="Select ISP"
-                                // sx={{ paddingTop: '15px' }}
                             >
                                 {isps.map((isp, index) => (
                                     <MenuItem key={index} value={isp.id}>

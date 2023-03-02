@@ -27,6 +27,9 @@ Frontend for the Connect Lodhran Portal
 ///jab tak ISP select na ho to entries load na hon (done)
 ///date filters add krne hen (done)
 
+//send invoice page
+//isp, date, payment method, tid, amount, comments
+
 //invoices page
 //create page per (isp select, date, payment method, tid, amount, details)
 ///total show hoga
@@ -34,6 +37,9 @@ Frontend for the Connect Lodhran Portal
 ///be defeault today date hogi, start date, end date, isp ka filter hoga uper
 /// completed or pending sari show hon gi
 /// Method or TID show ni krna, payment status krna h show
+
+//grand summary
+//current months data (income[sale rate se], invoice[purchase rate se], total users charged[legnth], profit[income-invoice])
 
 //manage expense option
 ///(payment method, tid, amount, date, time, details, picture)

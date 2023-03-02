@@ -10,6 +10,7 @@ import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 
 // assets
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
+import { THEME_COLOR_DARK } from 'utils/Constants';
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme }) => ({

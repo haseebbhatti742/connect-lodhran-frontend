@@ -6,6 +6,7 @@ import jwt from 'jwtservice/jwtService';
 import { Navigate } from 'react-router';
 import CompletePayment from 'views/entries/CompletePayment';
 import AllInvoices from 'views/invoice/AllInvoices';
+import SendInvoice from 'views/invoice/SendInvoice';
 
 const MainLayout = Loadable(lazy(() => import('layout/MainLayout')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -82,6 +83,10 @@ const MainRoutes = {
         {
             path: '/dashboard/all-invoices',
             element: checkLogin(<AllInvoices />)
+        },
+        {
+            path: '/dashboard/send-invoice',
+            element: checkLogin(<SendInvoice />)
         },
         {
             path: '/dashboard/add-user',
