@@ -6,7 +6,6 @@ import jwt from 'jwtservice/jwtService';
 import { useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddISPValidationSchema } from '../../utils/ValidationSchemas';
@@ -28,16 +27,13 @@ function AddISP() {
     const onSubmit = (values) => {
         setIsLoading(true);
         jwt.createIsp(values)
+
             .then((res) => {
-                console.log('Create Isp Result');
-                console.log(res);
                 setIsLoading(false);
-                toast.success('Isp Added');
+                alert('Isp Added');
                 navigate('/dashboard/all-isps');
             })
             .catch((err) => {
-                console.log('Create Isp Result');
-                console.log(err?.response?.data?.message);
                 setIsLoading(false);
                 setIsError(true);
                 setErrorMssage(err?.response?.data?.message);

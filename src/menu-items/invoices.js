@@ -45,7 +45,7 @@ const invoices = {
                     id: 'invoice',
                     title: 'Invoices',
                     type: 'item',
-                    url: '/dashboard/invoices',
+                    url: '/dashboard/all-invoices',
                     target: false
                 }
             ]

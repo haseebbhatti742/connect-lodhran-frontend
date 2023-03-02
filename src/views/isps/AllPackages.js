@@ -68,7 +68,6 @@ const deletePackage = (id) => {
     console.log(id);
 };
 
-// eslint-disable-next-line
 const DeleteButton = ({ id }) => {
     return (
         <Button variant="contained" color="error" onClick={() => deletePackage(id)}>
@@ -101,8 +100,6 @@ export default function AllPackages() {
         setIsLoading(true);
         jwt.getAllPackages(ispId)
             .then((res) => {
-                console.log('Get Packages Result');
-                console.log(res);
                 setIsLoading(false);
                 setCompanyName(res?.data[0]?.isp?.name);
                 let rowsData = [];
@@ -123,13 +120,10 @@ export default function AllPackages() {
                 setRows(rowsData);
             })
             .catch((err) => {
-                console.log('Get Packages Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
             });
-        // eslint-disable-next-line
     }, []);
 
     return (

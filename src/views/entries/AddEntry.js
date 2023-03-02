@@ -6,9 +6,8 @@ import jwt from 'jwtservice/jwtService';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
-import { PAYMENT_METHODS } from 'utils/Constants';
+import { PAYMENT_METHODS, THEME_COLOR_DARK } from 'utils/Constants';
 
 import { CreateEntryValidationSchema } from '../../utils/ValidationSchemas';
 
@@ -20,6 +19,7 @@ function AddEntry() {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [colorBg, setColorBg] = useState(THEME_COLOR_DARK);
 
     const navigate = useNavigate();
 
@@ -27,20 +27,15 @@ function AddEntry() {
         setIsLoading(true);
         jwt.getAllIsps()
             .then((res) => {
-                console.log('All Isps Result');
-                console.log(res);
                 setIsps(res?.data);
                 setIsLoading(false);
                 setIsError(false);
             })
             .catch((err) => {
-                console.log('All Isps Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
             });
-        // eslint-disable-next-line
     }, []);
 
     // const { ispId, color } = useLocation().state;
@@ -60,16 +55,12 @@ function AddEntry() {
         setIsLoading(true);
         jwt.createEntry(values)
             .then((res) => {
-                console.log('Create Entry Result');
-                console.log(res);
                 setIsLoading(false);
                 setIsError(false);
-                toast.success('Entry Created');
+                alert('Entry Created');
                 navigate('/dashboard/all-entries');
             })
             .catch((err) => {
-                console.log('Create Entry Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
@@ -97,15 +88,12 @@ function AddEntry() {
         setIsLoading(true);
         jwt.getAllPackages(isp)
             .then((res) => {
-                console.log('All Packages Result');
-                console.log(res);
                 setPackages(res?.data);
+                setColorBg(res?.data[0]?.isp?.color);
                 setIsLoading(false);
                 setIsError(false);
             })
             .catch((err) => {
-                console.log('All Packages Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
@@ -305,7 +293,7 @@ function AddEntry() {
                         </label>
                         <Box sx={{ mt: 2 }}>
                             <Grid sx={{ width: '100%' }}>
-                                <SimpleButton isValid={!isValid} title="Add Package" />
+                                <SimpleButton isValid={!isValid} title="Add Package" color={colorBg} />
                             </Grid>
                         </Box>
                     </form>

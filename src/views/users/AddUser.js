@@ -5,7 +5,6 @@ import { Field, Formik } from 'formik';
 import jwt from 'jwtservice/jwtService';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddUserValidationSchema } from '../../utils/ValidationSchemas';
@@ -35,11 +34,10 @@ function AddUser() {
         jwt.createUser(values)
             .then((res) => {
                 setIsLoading(false);
-                toast.success('User Added');
+                alert('User Added');
                 navigate(-1);
             })
             .catch((err) => {
-                toast.error(err?.response?.data?.message);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);

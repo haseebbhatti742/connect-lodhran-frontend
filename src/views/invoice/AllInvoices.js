@@ -7,13 +7,12 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Alert, Button, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
-import { THEME_COLOR_DARK, THEME_COLOR_LIGHT } from 'utils/Constants';
+import { THEME_COLOR_LIGHT } from 'utils/Constants';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import jwt from 'jwtservice/jwtService';
 import moment from 'moment';
 import { getPaymentMethodNameByKey } from 'utils/Functions';
-import TotalIncomeLightCard from 'views/dashboard/Default/TotalIncomeLightCard';
 import TotalIncomeDarkCard from 'views/dashboard/Default/TotalIncomeDarkCard';
 
 const columns = [
@@ -73,7 +72,7 @@ const DeleteButton = ({ id }) => {
     );
 };
 
-export default function AllEntries() {
+export default function AllInvoices() {
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [rows, setRows] = useState([]);
@@ -83,7 +82,6 @@ export default function AllEntries() {
     const [startDate, setStartDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
     const [endDate, setEndDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
     const [total, setTotal] = useState(0);
-    const [colorBg, setColorBg] = useState(THEME_COLOR_LIGHT);
 
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
@@ -94,10 +92,6 @@ export default function AllEntries() {
     }, []);
 
     useEffect(() => {
-        console.log('startDate');
-        console.log(startDate);
-        console.log('endDate');
-        console.log(endDate);
         ispSelected !== '' && getEntries();
     }, [startDate, endDate, ispSelected]);
 
@@ -117,6 +111,7 @@ export default function AllEntries() {
             startDate: startDate,
             endDate: startDate !== endDate ? endDate : ''
         })
+
             .then((res) => {
                 let rowsData = [];
                 res?.data?.entries?.map((item, index) =>
@@ -135,7 +130,6 @@ export default function AllEntries() {
                 );
                 setRows(rowsData);
                 setTotal(res?.data?.total);
-                setColorBg(res?.data?.entries[0]?.isp?.color);
                 setIsLoading(false);
                 setIsError(false);
             })
@@ -148,6 +142,7 @@ export default function AllEntries() {
 
     const getIsps = () => {
         jwt.getAllIsps()
+
             .then((res) => {
                 setIsps(res?.data);
                 setIsLoading(false);
@@ -236,7 +231,7 @@ export default function AllEntries() {
                                                     align={column.align}
                                                     style={{
                                                         minWidth: column.minWidth,
-                                                        backgroundColor: colorBg,
+                                                        backgroundColor: THEME_COLOR_LIGHT,
                                                         color: 'white'
                                                     }}
                                                 >

@@ -18,14 +18,10 @@ function ViewAllISPs() {
         setLoading(true);
         jwt.getAllIsps()
             .then((res) => {
-                console.log('Isps Result');
-                console.log(res);
                 setIsps(res?.data);
                 setLoading(false);
             })
             .catch((err) => {
-                console.log('Isps Error');
-                console.log(err?.response?.data?.message);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setLoading(false);

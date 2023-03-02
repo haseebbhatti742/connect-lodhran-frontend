@@ -134,8 +134,8 @@ class JwtService {
         return axios.get(`${this.jwtConfig.entryEndpoint}/${id}`);
     }
 
-    getAllCompletedEntries() {
-        return axios.get(this.jwtConfig.entryEndpoint);
+    getAllCompletedEntries(payload) {
+        return axios.post(`${this.jwtConfig.entryEndpoint}/completed`, payload);
     }
 
     getAllPendingEntries() {

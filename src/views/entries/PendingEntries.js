@@ -111,7 +111,6 @@ export default function PendingEntries() {
         navigate(`/dashboard/complete-payment/${id}`);
     };
 
-    // eslint-disable-next-line
     const DeleteButton = ({ id }) => {
         return (
             <Button variant="contained" color="error" onClick={() => deletePackage(id)}>
@@ -120,7 +119,6 @@ export default function PendingEntries() {
         );
     };
 
-    // eslint-disable-next-line
     const CompletePaymentButton = ({ id }) => {
         return (
             <Button variant="contained" color="warning" onClick={() => completePayment(id)}>

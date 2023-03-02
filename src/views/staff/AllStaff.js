@@ -46,7 +46,6 @@ const deletePackage = (id) => {
     console.log(id);
 };
 
-// eslint-disable-next-line
 const DeleteButton = ({ id }) => {
     return (
         <Button variant="contained" color="error" onClick={() => deletePackage(id)}>
@@ -77,21 +76,16 @@ export default function AllStaff() {
         setIsLoading(true);
         jwt.getAllStaffs()
             .then((res) => {
-                console.log('Get Staff Result');
-                console.log(res);
                 setIsLoading(false);
                 let rowsData = [];
                 res?.data?.map((item) => rowsData.push(createData(item?.fullname, item?.email, item?.cnic, item?.mobile, item?.address)));
                 setRows(rowsData);
             })
             .catch((err) => {
-                console.log('Get Staffs Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
             });
-        // eslint-disable-next-line
     }, []);
 
     return (

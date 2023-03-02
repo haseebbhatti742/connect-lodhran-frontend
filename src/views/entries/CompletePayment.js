@@ -7,7 +7,6 @@ import moment from 'moment';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
 import { PAYMENT_METHODS } from 'utils/Constants';
 
@@ -30,22 +29,17 @@ function CompletePayment() {
     useEffect(() => {
         getEntry();
         getAllIsps();
-        // eslint-disable-next-line
     }, []);
 
     const getEntry = () => {
         setIsLoading(true);
         jwt.getEntryById(id)
             .then((res) => {
-                console.log('Get Entry Result');
-                console.log(res);
                 setEntry(res?.data);
                 setIsLoading(false);
                 setIsError(false);
             })
             .catch((err) => {
-                console.log('Get Entry Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
@@ -56,15 +50,11 @@ function CompletePayment() {
         setIsLoading(true);
         jwt.getAllIsps()
             .then((res) => {
-                console.log('All Isps Result');
-                console.log(res);
                 setIsps(res?.data);
                 setIsLoading(false);
                 setIsError(false);
             })
             .catch((err) => {
-                console.log('All Isps Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
@@ -75,16 +65,12 @@ function CompletePayment() {
         setIsLoading(true);
         jwt.updateEntry(id, values)
             .then((res) => {
-                console.log('Update Entry Result');
-                console.log(res);
                 setIsLoading(false);
                 setIsError(false);
-                toast.success('Entry Update');
+                alert('Entry Update');
                 navigate('/dashboard/all-entries');
             })
             .catch((err) => {
-                console.log('Create Entry Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
@@ -111,16 +97,13 @@ function CompletePayment() {
     const getPackages = (isp) => {
         setIsLoading(true);
         jwt.getAllPackages(isp)
+
             .then((res) => {
-                console.log('All Packages Result');
-                console.log(res);
                 setPackages(res?.data);
                 setIsLoading(false);
                 setIsError(false);
             })
             .catch((err) => {
-                console.log('All Packages Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);

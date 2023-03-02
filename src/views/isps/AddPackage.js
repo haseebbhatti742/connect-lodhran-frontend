@@ -5,7 +5,6 @@ import { Formik } from 'formik';
 import jwt from 'jwtservice/jwtService';
 import { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddPackageValidationSchema } from '../../utils/ValidationSchemas';
@@ -39,10 +38,10 @@ function AddPackage() {
     const onSubmit = (values) => {
         setIsLoading(true);
         jwt.createPackage(values)
+
             .then((res) => {
-                console.log(res);
                 setIsLoading(false);
-                toast.success('Package Added');
+                alert('Package Added');
                 navigate(-1);
             })
             .catch((err) => {

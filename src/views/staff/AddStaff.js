@@ -5,7 +5,6 @@ import { Field, Formik } from 'formik';
 import jwt from 'jwtservice/jwtService';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { toast } from 'react-toastify';
 import SimpleButton from 'ui-component/SimpleButton';
 
 import { AddStaffValidationSchema } from '../../utils/ValidationSchemas';
@@ -14,7 +13,6 @@ function AddStaff() {
     const theme = useTheme();
     const navigate = useNavigate();
 
-    // eslint-disable-next-line
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
@@ -34,10 +32,10 @@ function AddStaff() {
         console.log(values);
         setIsLoading(true);
         jwt.addStaff({ ...values, type: 'staff' })
+
             .then((res) => {
-                console.log(res);
                 setIsLoading(false);
-                toast.success('Staff Added');
+                alert('Staff Added');
                 navigate(-1);
             })
             .catch((err) => {

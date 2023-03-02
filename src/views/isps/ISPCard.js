@@ -53,9 +53,7 @@ const CardWrapper = styled(MainCard)(({ color, theme }) => ({
     }
 }));
 
-// eslint-disable-next-line
 const ISPCard = ({ isp, isLoading }) => {
-    // eslint-disable-next-line
     const { id, name, vlan, color, openingBalance } = isp;
 
     const theme = useTheme();

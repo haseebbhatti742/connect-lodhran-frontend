@@ -46,7 +46,6 @@ const deletePackage = (id) => {
     console.log(id);
 };
 
-// eslint-disable-next-line
 const DeleteButton = ({ id }) => {
     return (
         <Button variant="contained" color="error" onClick={() => deletePackage(id)}>
@@ -77,8 +76,6 @@ export default function AllUsers() {
         setIsLoading(true);
         jwt.getAllUsers()
             .then((res) => {
-                console.log('Get Packages Result');
-                console.log(res);
                 setIsLoading(false);
                 let rowsData = [];
                 res?.data?.map((item) =>
@@ -89,13 +86,10 @@ export default function AllUsers() {
                 setRows(rowsData);
             })
             .catch((err) => {
-                console.log('Get Packages Error');
-                console.log(err);
                 setErrorMessage(err?.response?.data?.message);
                 setIsError(true);
                 setIsLoading(false);
             });
-        // eslint-disable-next-line
     }, []);
 
     return (

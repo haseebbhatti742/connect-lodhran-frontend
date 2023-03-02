@@ -10,8 +10,6 @@ Frontend for the Connect Lodhran Portal
 
 ### npm start
 
-//isp main logo add krna h
-
 //complete payment (done)
 ///only paymentMethod, tid, saleRate enbaled, baqi disabled, it will go to completed entries (done)
 ///sms alert option (done)
@@ -24,10 +22,10 @@ Frontend for the Connect Lodhran Portal
 ///print reciept (yes/no) with format
 
 //all entries page per
-///total show hoga
-//in all entries page, add fiter of ISP
-///jab tak ISP select na ho to entries load na hon
-///date filters add krne hen
+///total show hoga (done)
+//in all entries page, add fiter of ISP (done)
+///jab tak ISP select na ho to entries load na hon (done)
+///date filters add krne hen (done)
 
 //invoices page
 //create page per (isp select, date, payment method, tid, amount, details)

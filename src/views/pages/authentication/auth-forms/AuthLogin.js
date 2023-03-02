@@ -69,8 +69,6 @@ const FirebaseLogin = ({ ...others }) => {
                             setIsLoading(true);
                             jwt.login(values)
                                 .then((res) => {
-                                    console.log('Login Results');
-                                    console.log(res);
                                     setIsError(false);
                                     setErrorMessage('');
                                     jwt.setToken(res.data.tokens.access.token);
@@ -81,8 +79,6 @@ const FirebaseLogin = ({ ...others }) => {
                                     navigate(0);
                                 })
                                 .catch((err) => {
-                                    console.log('Login Error');
-                                    console.log(err);
                                     setErrorMessage(err?.response?.data?.message);
                                     setIsError(true);
                                     setIsLoading(false);
