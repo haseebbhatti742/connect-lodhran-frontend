@@ -19,12 +19,15 @@ export default {
     //package endpoint
     packageEndpoint: `${BASE_URL}/package`,
 
+    //staff endpoint
+    staffEndpoint: `${BASE_URL}/staff`,
+
     //user endpoint
     userEndpoint: `${BASE_URL}/user`,
 
     //entry endpoint
     entryEndpoint: `${BASE_URL}/entry`,
 
-    //staff endpoint
-    staffEndpoint: `${BASE_URL}/staff`
+    //invoice endpoint
+    invoiceEndpoint: `${BASE_URL}/invoice`
 };

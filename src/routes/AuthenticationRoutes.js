@@ -7,6 +7,7 @@ import jwt from 'jwtservice/jwtService';
 import { Navigate } from 'react-router';
 
 // login option 3 routing
+const LandingPage = Loadable(lazy(() => import('views/landing-page')));
 const AuthLogin = Loadable(lazy(() => import('views/pages/authentication/authentication/Login')));
 
 // ==============================|| AUTHENTICATION ROUTING ||============================== //
@@ -16,9 +17,13 @@ const checkLogin = (element) => {
 };
 
 const AuthenticationRoutes = {
-    path: '/login',
+    path: '/',
     element: checkLogin(<MinimalLayout />),
     children: [
+        {
+            path: '/',
+            element: checkLogin(<LandingPage />)
+        },
         {
             path: '/login',
             element: checkLogin(<AuthLogin />)

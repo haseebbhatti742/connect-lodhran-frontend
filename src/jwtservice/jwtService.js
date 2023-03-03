@@ -106,6 +106,10 @@ class JwtService {
         return axios.get(this.jwtConfig.ispEndpoint);
     }
 
+    getIspById(id) {
+        return axios.get(`${this.jwtConfig.ispEndpoint}/${id}`);
+    }
+
     createPackage(payload) {
         return axios.post(this.jwtConfig.packageEndpoint, payload);
     }
@@ -148,6 +152,10 @@ class JwtService {
 
     getAllStaffs() {
         return axios.get(this.jwtConfig.staffEndpoint);
+    }
+
+    createInvoice(payload) {
+        return axios.post(this.jwtConfig.invoiceEndpoint, payload);
     }
 }
 
