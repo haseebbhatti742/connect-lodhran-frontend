@@ -52,7 +52,7 @@ function AddUser() {
                 {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.fullname && errors.fullname)}
@@ -75,7 +75,7 @@ function AddUser() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.email && errors.email)}
@@ -101,7 +101,7 @@ function AddUser() {
                         </Grid>
 
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.userId && errors.userId)}
@@ -124,7 +124,7 @@ function AddUser() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.cnic && errors.cnic)}
@@ -149,7 +149,7 @@ function AddUser() {
                             </Grid>
                         </Grid>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.mobile && errors.mobile)}
@@ -172,7 +172,7 @@ function AddUser() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.address && errors.address)}

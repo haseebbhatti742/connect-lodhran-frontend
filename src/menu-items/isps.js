@@ -1,11 +1,6 @@
 // assets
 import { IconNetwork } from '@tabler/icons';
 
-// constant
-const icons = {
-    IconNetwork
-};
-
 // ==============================|| EXTRA ISP MENU ITEMS ||============================== //
 
 const isps = {
@@ -18,7 +13,7 @@ const isps = {
             id: 'add',
             title: 'Manage ISPs',
             type: 'collapse',
-            icon: icons.IconNetwork,
+            icon: IconNetwork,
             children: [
                 {
                     id: 'add-isp',

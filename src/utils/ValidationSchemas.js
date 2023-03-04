@@ -69,3 +69,12 @@ export const SendInvoiceValidationSchema = Yup.object().shape({
     amount: Yup.number().required('Amount is required'),
     comments: Yup.string().required('Comments are required')
 });
+
+export const AddExpenseValidationSchema = Yup.object().shape({
+    paymentMethod: Yup.string().required('Payment Method is required'),
+    tid: Yup.string().required('TID is required'),
+    amount: Yup.number().required('Amount is required'),
+    date: Yup.date().required('Date is required'),
+    time: Yup.string().required('Time is required'),
+    details: Yup.string().required('Details are required')
+});

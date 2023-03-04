@@ -102,7 +102,7 @@ function SendInvoice() {
                 {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl fullWidth error={Boolean(touched.isp && errors.isp)} sx={{ ...theme.typography.customInput }}>
                                     <InputLabel> Select User's ISP </InputLabel>
                                     <Select
@@ -126,7 +126,7 @@ function SendInvoice() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.date && errors.date)}
@@ -153,7 +153,7 @@ function SendInvoice() {
                         </Grid>
 
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.paymentMethod && errors.paymentMethod)}
@@ -181,7 +181,7 @@ function SendInvoice() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl fullWidth error={Boolean(touched.tid && errors.tid)} sx={{ ...theme.typography.customInput }}>
                                     <InputLabel> TID </InputLabel>
                                     <OutlinedInput
@@ -203,7 +203,7 @@ function SendInvoice() {
                             </Grid>
                         </Grid>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.amount && errors.amount)}
@@ -228,7 +228,7 @@ function SendInvoice() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.comments && errors.comments)}

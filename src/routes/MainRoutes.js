@@ -7,6 +7,7 @@ import { Navigate } from 'react-router';
 import CompletePayment from 'views/entries/CompletePayment';
 import AllInvoices from 'views/invoice/AllInvoices';
 import SendInvoice from 'views/invoice/SendInvoice';
+import AddExpense from 'views/expense/AddExpense';
 
 const MainLayout = Loadable(lazy(() => import('layout/MainLayout')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -95,6 +96,10 @@ const MainRoutes = {
         {
             path: '/dashboard/all-users',
             element: checkLogin(<AllUsers />)
+        },
+        {
+            path: '/dashboard/add-expense',
+            element: checkLogin(<AddExpense />)
         }
     ]
 };

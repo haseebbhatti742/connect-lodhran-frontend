@@ -1,14 +1,6 @@
 // assets
 import { IconTypography, IconPalette, IconShadow, IconWindmill } from '@tabler/icons';
 
-// constant
-const icons = {
-    IconTypography,
-    IconPalette,
-    IconShadow,
-    IconWindmill
-};
-
 // ==============================|| UTILITIES MENU ITEMS ||============================== //
 
 const utilities = {
@@ -21,7 +13,7 @@ const utilities = {
             title: 'Typography',
             type: 'item',
             url: '/utils/util-typography',
-            icon: icons.IconTypography,
+            icon: IconTypography,
             breadcrumbs: false
         },
         {
@@ -29,7 +21,7 @@ const utilities = {
             title: 'Color',
             type: 'item',
             url: '/utils/util-color',
-            icon: icons.IconPalette,
+            icon: IconPalette,
             breadcrumbs: false
         },
         {
@@ -37,14 +29,14 @@ const utilities = {
             title: 'Shadow',
             type: 'item',
             url: '/utils/util-shadow',
-            icon: icons.IconShadow,
+            icon: IconShadow,
             breadcrumbs: false
         },
         {
             id: 'icons',
             title: 'Icons',
             type: 'collapse',
-            icon: icons.IconWindmill,
+            icon: IconWindmill,
             children: [
                 {
                     id: 'tabler-icons',

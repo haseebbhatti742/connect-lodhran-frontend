@@ -131,7 +131,7 @@ function AddEntry() {
                             )}
                         </FormControl>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.userId && errors.userId)}
@@ -155,7 +155,7 @@ function AddEntry() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.package && errors.package)}
@@ -185,7 +185,7 @@ function AddEntry() {
                             </Grid>
                         </Grid>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.paymentMethod && errors.paymentMethod)}
@@ -213,7 +213,7 @@ function AddEntry() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl fullWidth error={Boolean(touched.tid && errors.tid)} sx={{ ...theme.typography.customInput }}>
                                     <InputLabel> TID </InputLabel>
                                     <OutlinedInput
@@ -236,7 +236,7 @@ function AddEntry() {
                             </Grid>
                         </Grid>
                         <Grid container spacing={2}>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.saleRate && errors.saleRate)}
@@ -262,7 +262,7 @@ function AddEntry() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={6}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.expiryDate && errors.expiryDate)}

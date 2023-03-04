@@ -7,39 +7,13 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Alert, Button } from '@mui/material';
-import { THEME_COLOR_LIGHT } from 'utils/Constants';
+import { THEME_COLOR_DARK } from 'utils/Constants';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import jwt from 'jwtservice/jwtService';
 
-const columns = [
-    { id: 'fullname', label: 'Full Name', minWidth: 170 },
-    { id: 'userId', label: '\u00a0User ID', minWidth: 100 },
-    {
-        id: 'cnic',
-        label: 'CNIC',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'mobile',
-        label: 'Mobile\u00a0',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'address',
-        label: 'Address',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toFixed(2)
-    }
-];
-
-function createData(fullname, userId, cnic, mobile, address, action) {
-    return { fullname, userId, cnic, mobile, address, action };
+function createData(sr, name, userId, cnic, mobile, email, address, action) {
+    return { sr, name, userId, cnic, mobile, email, address, action };
 }
 
 const deletePackage = (id) => {
@@ -63,6 +37,8 @@ export default function AllUsers() {
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
+    const style = { backgroundColor: THEME_COLOR_DARK, color: 'white' };
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -78,9 +54,18 @@ export default function AllUsers() {
             .then((res) => {
                 setIsLoading(false);
                 let rowsData = [];
-                res?.data?.map((item) =>
+                res?.data?.map((item, index) =>
                     rowsData.push(
-                        createData(item?.fullname, item?.userId, item?.cnic, item?.mobile, item?.address, <DeleteButton id={item?.id} />)
+                        createData(
+                            index + 1,
+                            item?.fullname,
+                            item?.userId,
+                            item?.cnic,
+                            item?.mobile,
+                            item?.email,
+                            item?.address,
+                            <DeleteButton id={item?.id} />
+                        )
                     )
                 );
                 setRows(rowsData);
@@ -103,29 +88,26 @@ export default function AllUsers() {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth, backgroundColor: THEME_COLOR_LIGHT, color: 'white' }}
-                                        >
-                                            {column.label}
-                                        </TableCell>
-                                    ))}
+                                    <TableCell style={style}>Sr.</TableCell>
+                                    <TableCell style={style}>Name</TableCell>
+                                    <TableCell style={style}>User Id</TableCell>
+                                    <TableCell style={style}>CNIC</TableCell>
+                                    <TableCell style={style}>Mobile</TableCell>
+                                    <TableCell style={style}>Email</TableCell>
+                                    <TableCell style={style}>Address</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
                                 {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
                                     return (
                                         <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                    </TableCell>
-                                                );
-                                            })}
+                                            <TableCell>{row?.sr}</TableCell>
+                                            <TableCell>{row?.name}</TableCell>
+                                            <TableCell>{row?.userId}</TableCell>
+                                            <TableCell>{row?.cnic}</TableCell>
+                                            <TableCell>{row?.mobile}</TableCell>
+                                            <TableCell>{row?.email}</TableCell>
+                                            <TableCell>{row?.address}</TableCell>
                                         </TableRow>
                                     );
                                 })}

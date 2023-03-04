@@ -1,24 +1,19 @@
 // assets
-import { IconFileInvoice } from '@tabler/icons';
-
-// constant
-const icons = {
-    IconFileInvoice
-};
+import { IconReceipt2 } from '@tabler/icons';
 
 // ==============================|| EXTRA ISP MENU ITEMS ||============================== //
 
 const invoices = {
     id: 'invoices',
-    title: 'Invoices',
+    title: 'Manage Invoices',
     // caption: 'Handle your invoices',
     type: 'group',
     children: [
         {
             id: 'add',
-            title: 'Invoice Entry',
+            title: 'Manage Invoices',
             type: 'collapse',
-            icon: icons.IconFileInvoice,
+            icon: IconReceipt2,
             children: [
                 {
                     id: 'invoice',

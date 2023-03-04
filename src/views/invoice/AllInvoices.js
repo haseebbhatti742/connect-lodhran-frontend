@@ -159,7 +159,7 @@ export default function AllInvoices() {
         <>
             <form style={{ marginTop: '15px' }}>
                 <Grid container spacing={2}>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={12} md={3} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel> Start Date </InputLabel>
                             <OutlinedInput
@@ -172,7 +172,7 @@ export default function AllInvoices() {
                             />
                         </FormControl>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={12} md={3} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel> End Date </InputLabel>
                             <OutlinedInput
@@ -185,7 +185,7 @@ export default function AllInvoices() {
                             />
                         </FormControl>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={12} md={6} lg={6}>
                         <FormControl fullWidth>
                             <InputLabel> Select ISP </InputLabel>
                             <Select
@@ -195,7 +195,6 @@ export default function AllInvoices() {
                                 value={ispSelected}
                                 onChange={(event) => setIspSelected(event.target.value)}
                                 label="Select ISP"
-                                // sx={{ paddingTop: '15px' }}
                             >
                                 {isps.map((isp, index) => (
                                     <MenuItem key={index} value={isp.id}>
@@ -208,7 +207,7 @@ export default function AllInvoices() {
                 </Grid>
             </form>
             <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={12} md={3} lg={3}>
                     <TotalIncomeDarkCard isLoading={false} total={total} />
                 </Grid>
             </Grid>

@@ -1,11 +1,6 @@
 // assets
 import { IconUsers } from '@tabler/icons';
 
-// constant
-const icons = {
-    IconUsers
-};
-
 // ==============================|| EXTRA ISP MENU ITEMS ||============================== //
 
 const users = {
@@ -18,7 +13,7 @@ const users = {
             id: 'add',
             title: 'Manage Users',
             type: 'collapse',
-            icon: icons.IconUsers,
+            icon: IconUsers,
             children: [
                 {
                     id: 'add-user',

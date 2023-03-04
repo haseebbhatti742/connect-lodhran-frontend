@@ -16,56 +16,8 @@ import { getPaymentMethodNameByKey } from 'utils/Functions';
 import TotalIncomeLightCard from 'views/dashboard/Default/TotalIncomeLightCard';
 import TotalIncomeDarkCard from 'views/dashboard/Default/TotalIncomeDarkCard';
 
-const columns = [
-    { id: 'sr', label: 'Sr.', minWidth: 170 },
-    { id: 'isp', label: 'Isp', minWidth: 170 },
-    { id: 'userId', label: '\u00a0User Id', minWidth: 100 },
-    {
-        id: 'packageName',
-        label: 'Package',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'paymentMethod',
-        label: 'Payment Method\u00a0',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'tid',
-        label: 'TID',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'saleRate',
-        label: 'Sale Rate',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'purchaseRate',
-        label: 'Purchase Rate',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'expiryDate',
-        label: 'Expiry Date',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toFixed(2)
-    }
-];
-
-function createData(sr, isp, userId, packageName, paymentMethod, tid, saleRate, purchaseRate, expiryDate) {
-    return { sr, isp, userId, packageName, paymentMethod, tid, saleRate, purchaseRate, expiryDate };
+function createData(sr, userId, packageName, paymentMethod, tid, saleRate, expiryDate) {
+    return { sr, userId, packageName, paymentMethod, tid, saleRate, expiryDate };
 }
 
 const deletePackage = (id) => {
@@ -95,6 +47,8 @@ export default function AllEntries() {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+
+    const style = { backgroundColor: colorBg, color: 'white' };
 
     useEffect(() => {
         getIsps();
@@ -130,13 +84,11 @@ export default function AllEntries() {
                     rowsData.push(
                         createData(
                             index + 1,
-                            item?.isp?.name,
                             item?.userId,
                             item?.package?.name,
                             getPaymentMethodNameByKey(item?.paymentMethod),
                             item?.tid,
                             item?.saleRate,
-                            item?.package?.purchaseRate,
                             moment(item?.expiryDate).format('DD/MM/YYYY')
                         )
                     )
@@ -172,7 +124,7 @@ export default function AllEntries() {
         <>
             <form style={{ marginTop: '15px' }}>
                 <Grid container spacing={2}>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={12} md={3} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel> Start Date </InputLabel>
                             <OutlinedInput
@@ -185,7 +137,7 @@ export default function AllEntries() {
                             />
                         </FormControl>
                     </Grid>
-                    <Grid item xs={3}>
+                    <Grid item xs={12} sm={12} md={3} lg={3}>
                         <FormControl fullWidth>
                             <InputLabel> End Date </InputLabel>
                             <OutlinedInput
@@ -198,7 +150,7 @@ export default function AllEntries() {
                             />
                         </FormControl>
                     </Grid>
-                    <Grid item xs={6}>
+                    <Grid item xs={12} sm={12} md={6} lg={6}>
                         <FormControl fullWidth>
                             <InputLabel> Select ISP </InputLabel>
                             <Select
@@ -220,7 +172,7 @@ export default function AllEntries() {
                 </Grid>
             </form>
             <Grid container spacing={2} sx={{ mt: 1 }}>
-                <Grid item xs={3}>
+                <Grid item xs={12} sm={12} md={3} lg={3}>
                     <TotalIncomeDarkCard isLoading={false} total={total} />
                 </Grid>
             </Grid>
@@ -237,33 +189,26 @@ export default function AllEntries() {
                                 <Table stickyHeader aria-label="sticky table">
                                     <TableHead>
                                         <TableRow>
-                                            {columns.map((column) => (
-                                                <TableCell
-                                                    key={column.id}
-                                                    align={column.align}
-                                                    style={{
-                                                        minWidth: column.minWidth,
-                                                        backgroundColor: colorBg,
-                                                        color: 'white'
-                                                    }}
-                                                >
-                                                    {column.label}
-                                                </TableCell>
-                                            ))}
+                                            <TableCell style={style}>Sr.</TableCell>
+                                            <TableCell style={style}>User Id</TableCell>
+                                            <TableCell style={style}>Package</TableCell>
+                                            <TableCell style={style}>Payment Method</TableCell>
+                                            <TableCell style={style}>TID</TableCell>
+                                            <TableCell style={style}>Amount</TableCell>
+                                            <TableCell style={style}>Date</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                        {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                                             return (
-                                                <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                                    {columns.map((column) => {
-                                                        const value = row[column.id];
-                                                        return (
-                                                            <TableCell key={column.id} align={column.align}>
-                                                                {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                            </TableCell>
-                                                        );
-                                                    })}
+                                                <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                                    <TableCell>{index + 1}</TableCell>
+                                                    <TableCell>{row?.userId}</TableCell>
+                                                    <TableCell>{row?.packageName}</TableCell>
+                                                    <TableCell>{row?.paymentMethod}</TableCell>
+                                                    <TableCell>{row?.tid}</TableCell>
+                                                    <TableCell>{row?.saleRate}</TableCell>
+                                                    <TableCell>{row?.expiryDate}</TableCell>
                                                 </TableRow>
                                             );
                                         })}

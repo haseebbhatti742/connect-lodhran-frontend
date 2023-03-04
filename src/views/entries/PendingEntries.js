@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Alert, Button } from '@mui/material';
-import { THEME_COLOR_LIGHT } from 'utils/Constants';
+import { THEME_COLOR_DARK } from 'utils/Constants';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import jwt from 'jwtservice/jwtService';
@@ -15,41 +15,8 @@ import moment from 'moment';
 import { getPaymentMethodNameByKey } from 'utils/Functions';
 import { useNavigate } from 'react-router';
 
-const columns = [
-    { id: 'isp', label: 'Isp', minWidth: 170 },
-    { id: 'userId', label: '\u00a0User Id', minWidth: 100 },
-    {
-        id: 'packageName',
-        label: 'Package',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'paymentMethod',
-        label: 'Payment Method\u00a0',
-        minWidth: 170,
-        align: 'left',
-        format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'expiryDate',
-        label: 'Expiry Date',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'action',
-        label: 'Action',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toFixed(2)
-    }
-];
-
-function createData(isp, userId, packageName, paymentMethod, expiryDate, action) {
-    return { isp, userId, packageName, paymentMethod, expiryDate, action };
+function createData(isp, userId, packageName, paymentMethod, saleRate, expiryDate, action) {
+    return { isp, userId, packageName, paymentMethod, saleRate, expiryDate, action };
 }
 
 export default function PendingEntries() {
@@ -61,6 +28,8 @@ export default function PendingEntries() {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+
+    const style = { backgroundColor: THEME_COLOR_DARK, color: 'white' };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -87,6 +56,7 @@ export default function PendingEntries() {
                             item?.userId,
                             item?.package?.name,
                             getPaymentMethodNameByKey(item?.paymentMethod),
+                            item?.package?.saleRate,
                             moment(item?.expiryDate).format('DD/MM/YYYY'),
                             <CompletePaymentButton id={item?.id} />
                         )
@@ -139,29 +109,28 @@ export default function PendingEntries() {
                             <Table stickyHeader aria-label="sticky table">
                                 <TableHead>
                                     <TableRow>
-                                        {columns.map((column) => (
-                                            <TableCell
-                                                key={column.id}
-                                                align={column.align}
-                                                style={{ minWidth: column.minWidth, backgroundColor: THEME_COLOR_LIGHT, color: 'white' }}
-                                            >
-                                                {column.label}
-                                            </TableCell>
-                                        ))}
+                                        <TableCell style={style}>Sr.</TableCell>
+                                        <TableCell style={style}>ISP</TableCell>
+                                        <TableCell style={style}>User Id</TableCell>
+                                        <TableCell style={style}>Package</TableCell>
+                                        <TableCell style={style}>Payment Method</TableCell>
+                                        <TableCell style={style}>Amount</TableCell>
+                                        <TableCell style={style}>Date</TableCell>
+                                        <TableCell style={style}>Action</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                    {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                                         return (
-                                            <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                                {columns.map((column) => {
-                                                    const value = row[column.id];
-                                                    return (
-                                                        <TableCell key={column.id} align={column.align}>
-                                                            {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                        </TableCell>
-                                                    );
-                                                })}
+                                            <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                                <TableCell>{index + 1}</TableCell>
+                                                <TableCell>{row?.isp}</TableCell>
+                                                <TableCell>{row?.userId}</TableCell>
+                                                <TableCell>{row?.packageName}</TableCell>
+                                                <TableCell>{row?.paymentMethod}</TableCell>
+                                                <TableCell>{row?.saleRate}</TableCell>
+                                                <TableCell>{row?.expiryDate}</TableCell>
+                                                <TableCell>{row?.action}</TableCell>
                                             </TableRow>
                                         );
                                     })}
