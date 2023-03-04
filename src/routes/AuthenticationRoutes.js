@@ -5,6 +5,7 @@ import Loadable from 'ui-component/Loadable';
 import MinimalLayout from 'layout/MinimalLayout';
 import jwt from 'jwtservice/jwtService';
 import { Navigate } from 'react-router';
+import ApiConnectionError from 'views/error/ApiConnectionError';
 
 // login option 3 routing
 const LandingPage = Loadable(lazy(() => import('views/landing-page')));
@@ -27,6 +28,10 @@ const AuthenticationRoutes = {
         {
             path: '/login',
             element: checkLogin(<AuthLogin />)
+        },
+        {
+            path: '/api-error',
+            element: checkLogin(<ApiConnectionError />)
         }
     ]
 };

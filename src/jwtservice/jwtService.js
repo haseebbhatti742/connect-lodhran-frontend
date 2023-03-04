@@ -1,4 +1,5 @@
 import axios from 'axios';
+import config from 'config';
 import jwtDefaultConfig from './jwtDefaultConfig';
 
 class JwtService {
@@ -20,8 +21,24 @@ class JwtService {
                 config.headers['Access-Control-Allow-Origin'] = '*';
                 return config;
             },
-            (error) => Promise.reject(error)
+            (error) => {
+                console.log('jwt error');
+                console.log(error);
+                Promise.reject(error);
+            }
         );
+
+        axios.interceptors.response.use(config, (error) => {
+            console.log('jwt error');
+            console.log(error);
+            if (error?.code === 'ERR_NETWORK') {
+                this.setIsLogin(false);
+                this.removeToken();
+                this.removeRefreshtoken();
+                this.removeUser();
+                window.location.replace('/api-error');
+            }
+        });
     }
 
     onAccessTokenFetched(accessToken) {
