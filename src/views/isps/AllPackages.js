@@ -6,77 +6,19 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { THEME_COLOR_DARK, THEME_COLOR_LIGHT } from '../../utils/Constants';
-import { useLocation } from 'react-router';
+import { STAFF_TYPES, THEME_COLOR_DARK, THEME_COLOR_LIGHT } from '../../utils/Constants';
+import { useLocation, useNavigate } from 'react-router';
 import { Alert, Button } from '@mui/material';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import jwt from 'jwtservice/jwtService';
 
-const columns = [
-    { id: 'name', label: 'Name', minWidth: 170 },
-    { id: 'bandwidth', label: '\u00a0Bandwidth', minWidth: 100 },
-    {
-        id: 'rateType',
-        label: 'Rate Type',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'ratePerDay',
-        label: 'Rate/Day\u00a0',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toLocaleString('en-US')
-    },
-    {
-        id: 'purchaseRate',
-        label: 'Purchase Rate',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'saleRate',
-        label: 'Sale Rate',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'validity',
-        label: 'Validity',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toFixed(2)
-    },
-    {
-        id: 'action',
-        label: 'Action',
-        minWidth: 170,
-        align: 'right',
-        format: (value) => value.toFixed(2)
-    }
-];
-
-function createData(name, bandwidth, rateType, ratePerDay, purchaseRate, saleRate, validity, action) {
-    return { name, bandwidth, rateType, ratePerDay, purchaseRate, saleRate, validity, action };
+function createData(id, ispId, color, name, bandwidth, rateType, ratePerDay, purchaseRate, saleRate, validity) {
+    return { id, ispId, color, name, bandwidth, rateType, ratePerDay, purchaseRate, saleRate, validity };
 }
 
-const deletePackage = (id) => {
-    console.log(id);
-};
-
-const DeleteButton = ({ id }) => {
-    return (
-        <Button variant="contained" color="error" onClick={() => deletePackage(id)}>
-            Delete
-        </Button>
-    );
-};
-
 export default function AllPackages() {
+    const navigate = useNavigate();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [rows, setRows] = useState([]);
@@ -85,6 +27,8 @@ export default function AllPackages() {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+
+    const style = { backgroundColor: THEME_COLOR_LIGHT, color: 'white' };
 
     const { ispId = '', color = THEME_COLOR_DARK } = useLocation().state;
     const handleChangePage = (event, newPage) => {
@@ -106,14 +50,16 @@ export default function AllPackages() {
                 res?.data?.map((item) =>
                     rowsData.push(
                         createData(
+                            item?.id,
+                            item?.isp?.id,
+                            item?.isp?.color,
                             item?.name,
                             item?.bandwidth,
                             item?.rateType === 'day' ? 'Per Day' : 'Per Month',
                             item?.ratePerDay,
                             item?.purchaseRate,
                             item?.saleRate,
-                            item?.validity,
-                            <DeleteButton id={item?.id} />
+                            item?.validity
                         )
                     )
                 );
@@ -125,6 +71,17 @@ export default function AllPackages() {
                 setIsLoading(false);
             });
     }, []);
+    const EditButton = ({ id, color, data }) => {
+        return (
+            <Button
+                variant="contained"
+                color="warning"
+                onClick={() => navigate(`/dashboard/edit-package/${id}`, { state: { color, data } })}
+            >
+                Edit
+            </Button>
+        );
+    };
 
     return (
         <Paper sx={{ width: '100%', overflow: 'hidden' }}>
@@ -137,37 +94,39 @@ export default function AllPackages() {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell
-                                        colSpan={columns.length}
-                                        sx={{ fontSize: 'xx-large', backgroundColor: color, color: 'white' }}
-                                    >
+                                    <TableCell colSpan={9} sx={{ fontSize: 'xx-large', backgroundColor: color, color: 'white' }}>
                                         {companyName}
                                     </TableCell>
                                 </TableRow>
                                 <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth, backgroundColor: THEME_COLOR_LIGHT, color: 'white' }}
-                                        >
-                                            {column.label}
-                                        </TableCell>
-                                    ))}
+                                    <TableCell style={style}> Sr. </TableCell>
+                                    <TableCell style={style}> Name </TableCell>
+                                    <TableCell style={style}> Bandwidth </TableCell>
+                                    <TableCell style={style}> Rate Type </TableCell>
+                                    <TableCell style={style}> Rate/Day </TableCell>
+                                    <TableCell style={style}> Purchase Rate </TableCell>
+                                    <TableCell style={style}> Sale Rate </TableCell>
+                                    <TableCell style={style}> Validity </TableCell>
+                                    {jwt.getUser()?.type === STAFF_TYPES.admin && <TableCell style={style}> Action </TableCell>}
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                    </TableCell>
-                                                );
-                                            })}
+                                        <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>{row?.name}</TableCell>
+                                            <TableCell>{row?.bandwidth}</TableCell>
+                                            <TableCell>{row?.rateType}</TableCell>
+                                            <TableCell>{row?.ratePerDay}</TableCell>
+                                            <TableCell>{row?.purchaseRate}</TableCell>
+                                            <TableCell>{row?.saleRate}</TableCell>
+                                            <TableCell>{row?.validity}</TableCell>
+                                            {jwt.getUser()?.type === STAFF_TYPES.admin && (
+                                                <TableCell>
+                                                    <EditButton id={row?.id} color={row?.color} data={row} />
+                                                </TableCell>
+                                            )}
                                         </TableRow>
                                     );
                                 })}

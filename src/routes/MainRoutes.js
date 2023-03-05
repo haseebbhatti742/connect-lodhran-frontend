@@ -4,10 +4,6 @@ import { lazy } from 'react';
 import Loadable from 'ui-component/Loadable';
 import jwt from 'jwtservice/jwtService';
 import { Navigate } from 'react-router';
-import CompletePayment from 'views/entries/CompletePayment';
-import AllInvoices from 'views/invoice/AllInvoices';
-import SendInvoice from 'views/invoice/SendInvoice';
-import AddExpense from 'views/expense/AddExpense';
 
 const MainLayout = Loadable(lazy(() => import('layout/MainLayout')));
 const DashboardDefault = Loadable(lazy(() => import('views/dashboard/Default')));
@@ -22,6 +18,13 @@ const AllUsers = Loadable(lazy(() => import('views/users/AllUsers')));
 const PendingEntries = Loadable(lazy(() => import('views/entries/PendingEntries')));
 const AddStaff = Loadable(lazy(() => import('views/staff/AddStaff')));
 const AllStaff = Loadable(lazy(() => import('views/staff/AllStaff')));
+const CompletePayment = Loadable(lazy(() => import('views/entries/CompletePayment')));
+const AllInvoices = Loadable(lazy(() => import('views/invoice/AllInvoices')));
+const SendInvoice = Loadable(lazy(() => import('views/invoice/SendInvoice')));
+const AddExpense = Loadable(lazy(() => import('views/expense/AddExpense')));
+const CompletedExpenses = Loadable(lazy(() => import('views/expense/CompletedExpenses')));
+const PendingExpenses = Loadable(lazy(() => import('views/expense/PendingExpenses copy')));
+const EditPackage = Loadable(lazy(() => import('views/isps/EditPackage')));
 
 // ==============================|| MAIN ROUTING ||============================== //
 
@@ -56,6 +59,10 @@ const MainRoutes = {
         {
             path: '/dashboard/add-package',
             element: checkLogin(<AddPackage />)
+        },
+        {
+            path: '/dashboard/edit-package/:packageId',
+            element: checkLogin(<EditPackage />)
         },
         {
             path: '/dashboard/all-packages',
@@ -100,6 +107,14 @@ const MainRoutes = {
         {
             path: '/dashboard/add-expense',
             element: checkLogin(<AddExpense />)
+        },
+        {
+            path: '/dashboard/all-expenses',
+            element: checkLogin(<CompletedExpenses />)
+        },
+        {
+            path: '/dashboard/pending-expenses',
+            element: checkLogin(<PendingExpenses />)
         }
     ]
 };

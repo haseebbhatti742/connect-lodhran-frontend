@@ -48,16 +48,24 @@ export const AddStaffValidationSchema = Yup.object().shape({
     address: Yup.string().required('Address is requires'),
     email: Yup.string().email().required('Email is required'),
     password: Yup.string().required('Password is required'),
+    type: Yup.string().required('Type is required'),
+    share: Yup.number().when('type', {
+        is: (val) => val === 'partner',
+        then: Yup.number().required('Share is required'),
+        otherwise: Yup.number()
+    }),
     sendWelcomeMessage: Yup.boolean().required()
 });
 
 export const CreateEntryValidationSchema = Yup.object().shape({
+    entryDate: Yup.date().required('Entry Date is required'),
     isp: Yup.string().required('ISP is required'),
     userId: Yup.string().required('User id is required'),
     package: Yup.string().required('Package is required'),
     paymentMethod: Yup.string().required('Payment Method id is required'),
     tid: Yup.string(),
     saleRate: Yup.number(),
+    startDate: Yup.date().required('Start Date is required'),
     expiryDate: Yup.date().required('Expiry Date is required')
 });
 
@@ -65,16 +73,15 @@ export const SendInvoiceValidationSchema = Yup.object().shape({
     isp: Yup.string().required('ISP is required'),
     date: Yup.date().required('Date is required'),
     paymentMethod: Yup.string().required('Payment Method id is required'),
-    tid: Yup.string().required('TID is required'),
+    tid: Yup.string(),
     amount: Yup.number().required('Amount is required'),
-    comments: Yup.string().required('Comments are required')
+    comments: Yup.string()
 });
 
 export const AddExpenseValidationSchema = Yup.object().shape({
     paymentMethod: Yup.string().required('Payment Method is required'),
-    tid: Yup.string().required('TID is required'),
+    tid: Yup.string(),
     amount: Yup.number().required('Amount is required'),
     date: Yup.date().required('Date is required'),
-    time: Yup.string().required('Time is required'),
     details: Yup.string().required('Details are required')
 });

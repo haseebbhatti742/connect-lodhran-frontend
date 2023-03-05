@@ -113,12 +113,14 @@ function CompletePayment() {
     useEffect(() => {
         getPackages(entry?.isp?.id);
         setInitialValues({
+            entryDate: moment(entry?.entryDate).format('YYYY-MM-DD'),
             isp: entry?.isp?.id,
             userId: entry?.userId,
             package: entry?.package?.id,
             paymentMethod: entry?.paymentMethod,
             tid: entry?.tid,
             saleRate: entry?.saleRate,
+            startDate: moment(entry?.startDate).format('YYYY-MM-DD'),
             expiryDate: moment(entry?.expiryDate).format('YYYY-MM-DD')
         });
     }, [entry]);
@@ -132,31 +134,65 @@ function CompletePayment() {
                 <Formik initialValues={initialValues} validationSchema={CreateEntryValidationSchema} onSubmit={onSubmit}>
                     {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                         <form onSubmit={handleSubmit}>
-                            <FormControl fullWidth error={Boolean(touched.isp && errors.isp)} sx={{ ...theme.typography.customInput }}>
-                                <InputLabel> Select User's ISP </InputLabel>
-                                <Select
-                                    id="isp"
-                                    name="isp"
-                                    type="text"
-                                    value={values.isp}
-                                    onBlur={handleBlur}
-                                    onChange={(event) => handleIspSelectChange(event, setFieldValue)}
-                                    label="User's ISP"
-                                    sx={{ paddingTop: '15px' }}
-                                    disabled
-                                >
-                                    {isps.map((isp) => (
-                                        <MenuItem value={isp.id}>{isp.name}</MenuItem>
-                                    ))}
-                                </Select>
-                                {touched.isp && errors.isp && (
-                                    <FormHelperText error id="standard-weight-helper-text-name">
-                                        {errors.isp}
-                                    </FormHelperText>
-                                )}
-                            </FormControl>
                             <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                    <FormControl
+                                        fullWidth
+                                        error={Boolean(touched.entryDate && errors.entryDate)}
+                                        sx={{ ...theme.typography.customInput }}
+                                    >
+                                        <InputLabel> Entry Date </InputLabel>
+                                        <OutlinedInput
+                                            id="entryDate"
+                                            name="entryDate"
+                                            type="date"
+                                            value={values.entryDate}
+                                            onBlur={handleBlur}
+                                            onChange={handleChange}
+                                            label="Entry Date"
+                                            sx={{ paddingTop: '5px' }}
+                                            inputProps={{ max: moment(new Date()).format('YYYY-MM-DD') }}
+                                            disabled
+                                        />
+                                        {touched.entryDate && errors.entryDate && (
+                                            <FormHelperText error id="standard-weight-helper-text-entryDate">
+                                                {errors.entryDate}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                    <FormControl
+                                        fullWidth
+                                        error={Boolean(touched.isp && errors.isp)}
+                                        sx={{ ...theme.typography.customInput }}
+                                    >
+                                        <InputLabel> Select User's ISP </InputLabel>
+                                        <Select
+                                            id="isp"
+                                            name="isp"
+                                            type="text"
+                                            value={values.isp}
+                                            onBlur={handleBlur}
+                                            onChange={(event) => handleIspSelectChange(event, setFieldValue)}
+                                            label="User's ISP"
+                                            sx={{ paddingTop: '15px' }}
+                                            disabled
+                                        >
+                                            {isps.map((isp) => (
+                                                <MenuItem value={isp.id}>{isp.name}</MenuItem>
+                                            ))}
+                                        </Select>
+                                        {touched.isp && errors.isp && (
+                                            <FormHelperText error id="standard-weight-helper-text-name">
+                                                {errors.isp}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
+                                </Grid>
+                            </Grid>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={12} md={6} lg={6}>
                                     <FormControl
                                         fullWidth
                                         error={Boolean(touched.userId && errors.userId)}
@@ -171,7 +207,7 @@ function CompletePayment() {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             label="User Id"
-                                            inputProps={{ min: 0 }}
+                                            inputProps={{ min: 1 }}
                                             disabled
                                         />
                                         {touched.userId && errors.userId && (
@@ -181,7 +217,7 @@ function CompletePayment() {
                                         )}
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} sm={12} md={6} lg={6}>
                                     <FormControl
                                         fullWidth
                                         error={Boolean(touched.package && errors.package)}
@@ -212,7 +248,7 @@ function CompletePayment() {
                                 </Grid>
                             </Grid>
                             <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} sm={12} md={4} lg={4}>
                                     <FormControl
                                         fullWidth
                                         error={Boolean(touched.paymentMethod && errors.paymentMethod)}
@@ -240,7 +276,7 @@ function CompletePayment() {
                                         )}
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} sm={12} md={4} lg={4}>
                                     <FormControl
                                         fullWidth
                                         error={Boolean(touched.tid && errors.tid)}
@@ -255,7 +291,8 @@ function CompletePayment() {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             label="TID"
-                                            inputProps={{ min: 0 }}
+                                            inputProps={{ min: 1 }}
+                                            sx={{ paddingTop: '5px' }}
                                             disabled={values.paymentMethod === 'net' || values.paymentMethod === 'pending'}
                                         />
                                         {touched.tid && errors.tid && (
@@ -265,9 +302,7 @@ function CompletePayment() {
                                         )}
                                     </FormControl>
                                 </Grid>
-                            </Grid>
-                            <Grid container spacing={2}>
-                                <Grid item xs={6}>
+                                <Grid item xs={12} sm={12} md={4} lg={4}>
                                     <FormControl
                                         fullWidth
                                         error={Boolean(touched.saleRate && errors.saleRate)}
@@ -282,8 +317,8 @@ function CompletePayment() {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             label="Sale Rate"
-                                            inputProps={{ min: 0 }}
-                                            sx={{ paddingTop: '15px' }}
+                                            inputProps={{ min: 1 }}
+                                            sx={{ paddingTop: '5px' }}
                                             disabled={values.paymentMethod === 'pending'}
                                         />
                                         {touched.saleRate && errors.saleRate && (
@@ -293,7 +328,34 @@ function CompletePayment() {
                                         )}
                                     </FormControl>
                                 </Grid>
-                                <Grid item xs={6}>
+                            </Grid>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={12} md={6} lg={6}>
+                                    <FormControl
+                                        fullWidth
+                                        error={Boolean(touched.startDate && errors.startDate)}
+                                        sx={{ ...theme.typography.customInput }}
+                                    >
+                                        <InputLabel> Start Date </InputLabel>
+                                        <OutlinedInput
+                                            id="startDate"
+                                            name="startDate"
+                                            type="date"
+                                            value={values.startDate}
+                                            onBlur={handleBlur}
+                                            onChange={handleChange}
+                                            label="Expriy Date"
+                                            sx={{ paddingTop: '5px' }}
+                                            disabled
+                                        />
+                                        {touched.startDate && errors.startDate && (
+                                            <FormHelperText error id="standard-weight-helper-text-startDate">
+                                                {errors.startDate}
+                                            </FormHelperText>
+                                        )}
+                                    </FormControl>
+                                </Grid>
+                                <Grid item xs={12} sm={12} md={6} lg={6}>
                                     <FormControl
                                         fullWidth
                                         error={Boolean(touched.expiryDate && errors.expiryDate)}
@@ -308,7 +370,7 @@ function CompletePayment() {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                             label="Expriy Date"
-                                            sx={{ paddingTop: '15px' }}
+                                            sx={{ paddingTop: '5px' }}
                                             disabled
                                         />
                                         {touched.expiryDate && errors.expiryDate && (
@@ -326,7 +388,7 @@ function CompletePayment() {
                                     type="checkbox"
                                     checked={values.sendWelcomeMessage}
                                 />
-                                Send SMS SLert
+                                Send SMS Alert
                             </label>
                             <Box sx={{ mt: 2 }}>
                                 <Grid sx={{ width: '100%' }}>

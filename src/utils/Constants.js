@@ -11,5 +11,12 @@ export const PAYMENT_METHODS = [
     { key: 'naya_paisa', value: 'NayaPay' },
     { key: 'sada_pay', value: 'SadaPay' },
     { key: 'other', value: 'Other' },
+    { key: 'cheque', value: 'Cheque' },
     { key: 'pending', value: 'Pending' }
 ];
+
+export const STAFF_TYPES = {
+    admin: 'superadmin',
+    partner: 'partner',
+    staff: 'staff'
+};

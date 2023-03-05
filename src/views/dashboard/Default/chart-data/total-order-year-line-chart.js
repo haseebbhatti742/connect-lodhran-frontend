@@ -22,7 +22,7 @@ const chartData = {
             width: 3
         },
         yaxis: {
-            min: 0,
+            min: 1,
             max: 100
         },
         tooltip: {

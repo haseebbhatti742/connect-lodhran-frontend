@@ -15,7 +15,7 @@ Frontend for the Connect Lodhran Portal
 ///sms alert option (done)
 
 //create entry page per (done)
-///send sms alert ka option add krna h (done)
+///Send SMS Alert ka option add krna h (done)
 
 //create user page (done)
 ///email dalni h (optional) (done)

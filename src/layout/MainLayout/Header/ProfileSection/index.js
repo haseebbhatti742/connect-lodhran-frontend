@@ -143,7 +143,7 @@ const ProfileSection = () => {
                                             <Stack direction="row" spacing={0.5} alignItems="center">
                                                 <Typography variant="h4">Welcome,</Typography>
                                                 <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                                                    {jwt.getUser().name}
+                                                    {jwt.getUser().fullname}
                                                 </Typography>
                                             </Stack>
                                             <Typography variant="subtitle2">{jwt.getUser().type}</Typography>

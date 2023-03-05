@@ -1,4 +1,4 @@
-const BASE_URL = 'http://192.168.100.48:4000/api/v1';
+const BASE_URL = 'http://127.0.0.1:4000/api/v1';
 
 export default {
     tokenType: 'Bearer',
@@ -29,5 +29,8 @@ export default {
     entryEndpoint: `${BASE_URL}/entry`,
 
     //invoice endpoint
-    invoiceEndpoint: `${BASE_URL}/invoice`
+    invoiceEndpoint: `${BASE_URL}/invoice`,
+
+    //expense endpoint
+    expenseEndpoint: `${BASE_URL}/expense`
 };

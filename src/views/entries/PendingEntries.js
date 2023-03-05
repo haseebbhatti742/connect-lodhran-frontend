@@ -15,8 +15,8 @@ import moment from 'moment';
 import { getPaymentMethodNameByKey } from 'utils/Functions';
 import { useNavigate } from 'react-router';
 
-function createData(isp, userId, packageName, paymentMethod, saleRate, expiryDate, action) {
-    return { isp, userId, packageName, paymentMethod, saleRate, expiryDate, action };
+function createData(isp, entryDate, userId, packageName, paymentMethod, saleRate, expiryDate, action) {
+    return { isp, entryDate, userId, packageName, paymentMethod, saleRate, expiryDate, action };
 }
 
 export default function PendingEntries() {
@@ -53,6 +53,7 @@ export default function PendingEntries() {
                     rowsData.push(
                         createData(
                             item?.isp?.name,
+                            moment(item?.entryDate).format('DD/MM/YYYY'),
                             item?.userId,
                             item?.package?.name,
                             getPaymentMethodNameByKey(item?.paymentMethod),
@@ -110,12 +111,13 @@ export default function PendingEntries() {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell style={style}>Sr.</TableCell>
+                                        <TableCell style={style}>Date</TableCell>
                                         <TableCell style={style}>ISP</TableCell>
                                         <TableCell style={style}>User Id</TableCell>
                                         <TableCell style={style}>Package</TableCell>
                                         <TableCell style={style}>Payment Method</TableCell>
                                         <TableCell style={style}>Amount</TableCell>
-                                        <TableCell style={style}>Date</TableCell>
+                                        <TableCell style={style}>Expiry Date</TableCell>
                                         <TableCell style={style}>Action</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -124,6 +126,7 @@ export default function PendingEntries() {
                                         return (
                                             <TableRow hover role="checkbox" tabIndex={-1} key={index}>
                                                 <TableCell>{index + 1}</TableCell>
+                                                <TableCell>{row?.entryDate}</TableCell>
                                                 <TableCell>{row?.isp}</TableCell>
                                                 <TableCell>{row?.userId}</TableCell>
                                                 <TableCell>{row?.packageName}</TableCell>

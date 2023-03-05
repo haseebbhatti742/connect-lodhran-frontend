@@ -53,7 +53,7 @@ function SendInvoice() {
                 setIsLoading(false);
                 setIsError(false);
                 alert('Invoice Sent');
-                navigate('/dashboard');
+                navigate('/dashboard/all-isps');
             })
             .catch((err) => {
                 setErrorMessage(err?.response?.data?.message);
@@ -113,7 +113,7 @@ function SendInvoice() {
                                         onBlur={handleBlur}
                                         onChange={(event) => handleIspSelectChange(event, setFieldValue)}
                                         label="User's ISP"
-                                        sx={{ paddingTop: '25px' }}
+                                        sx={{ paddingTop: '15px' }}
                                     >
                                         {isps.map((isp) => (
                                             <MenuItem value={isp.id}>{isp.name}</MenuItem>
@@ -141,7 +141,7 @@ function SendInvoice() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Date"
-                                        sx={{ paddingTop: '15px' }}
+                                        sx={{ paddingTop: '5px' }}
                                     />
                                     {touched.date && errors.date && (
                                         <FormHelperText error id="standard-weight-helper-text-date">
@@ -192,7 +192,8 @@ function SendInvoice() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="TID"
-                                        sx={{ paddingTop: '15px' }}
+                                        sx={{ paddingTop: '5px' }}
+                                        disabled={values.paymentMethod === 'net'}
                                     />
                                     {touched.tid && errors.tid && (
                                         <FormHelperText error id="standard-weight-helper-text-tid">
@@ -218,8 +219,7 @@ function SendInvoice() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Amount"
-                                        inputProps={{ min: 0 }}
-                                        sx={{ paddingTop: '15px' }}
+                                        inputProps={{ min: 1 }}
                                     />
                                     {touched.amount && errors.amount && (
                                         <FormHelperText error id="standard-weight-helper-text-sale-rate">
@@ -243,8 +243,7 @@ function SendInvoice() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Comments"
-                                        inputProps={{ min: 0 }}
-                                        sx={{ paddingTop: '15px' }}
+                                        inputProps={{ min: 1 }}
                                     />
                                     {touched.comments && errors.comments && (
                                         <FormHelperText error id="standard-weight-helper-text-comments">

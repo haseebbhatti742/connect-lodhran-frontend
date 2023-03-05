@@ -1,4 +1,4 @@
-import { Alert, FormControl, FormHelperText, Grid, InputLabel, OutlinedInput } from '@mui/material';
+import { Alert, FormControl, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { Field, Formik } from 'formik';
@@ -6,6 +6,7 @@ import jwt from 'jwtservice/jwtService';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
 import SimpleButton from 'ui-component/SimpleButton';
+import { STAFF_TYPES } from 'utils/Constants';
 
 import { AddStaffValidationSchema } from '../../utils/ValidationSchemas';
 
@@ -28,11 +29,8 @@ function AddStaff() {
     };
 
     const onSubmit = (values) => {
-        console.log('values');
-        console.log(values);
         setIsLoading(true);
-        jwt.addStaff({ ...values, type: 'staff' })
-
+        jwt.addStaff(values)
             .then((res) => {
                 setIsLoading(false);
                 alert('Staff Added');
@@ -45,12 +43,17 @@ function AddStaff() {
             });
     };
 
+    const handleStaffChange = (event, setFieldValue) => {
+        setFieldValue('type', event.target.value);
+        event.target.value === STAFF_TYPES.staff && setFieldValue('share', 0);
+    };
+
     return (
         <>
             <h3>Add Staff Details</h3>
             {isError && <Alert severity="error">{errorMessage}</Alert>}
             <Formik initialValues={initialValues} validationSchema={AddStaffValidationSchema} onSubmit={onSubmit}>
-                {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit }) => (
+                {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
@@ -191,6 +194,58 @@ function AddStaff() {
                                     {touched.address && errors.address && (
                                         <FormHelperText error id="standard-weight-helper-text-purchase-rate">
                                             {errors.address}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                <FormControl
+                                    fullWidth
+                                    error={Boolean(touched.type && errors.type)}
+                                    sx={{ ...theme.typography.customInput }}
+                                >
+                                    <InputLabel> Select Staff Type </InputLabel>
+                                    <Select
+                                        id="type"
+                                        name="type"
+                                        value={values.type}
+                                        onBlur={handleBlur}
+                                        onChange={(event) => handleStaffChange(event, setFieldValue)}
+                                        label="Staff Type"
+                                        sx={{ paddingTop: '10px' }}
+                                    >
+                                        <MenuItem value="partner">Partner</MenuItem>
+                                        <MenuItem value="staff">Staff</MenuItem>
+                                    </Select>
+                                    {touched.type && errors.type && (
+                                        <FormHelperText error id="standard-weight-helper-text-name">
+                                            {errors.type}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                <FormControl
+                                    fullWidth
+                                    error={Boolean(touched.share && errors.share)}
+                                    sx={{ ...theme.typography.customInput }}
+                                >
+                                    <InputLabel> Share </InputLabel>
+                                    <OutlinedInput
+                                        id="share"
+                                        name="share"
+                                        type="number"
+                                        value={values.share}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        label="share"
+                                        disabled={values.type === STAFF_TYPES.staff}
+                                    />
+                                    {touched.share && errors.share && (
+                                        <FormHelperText error id="standard-weight-helper-text-name">
+                                            {errors.share}
                                         </FormHelperText>
                                     )}
                                 </FormControl>

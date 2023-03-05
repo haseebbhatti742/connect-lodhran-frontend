@@ -1,9 +1,5 @@
 import { useTheme } from '@emotion/react';
 import { Alert, FormControl, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { format } from 'date-fns';
 import { Box } from '@mui/system';
 import { Formik } from 'formik';
@@ -12,33 +8,49 @@ import SimpleButton from 'ui-component/SimpleButton';
 import { PAYMENT_METHODS } from 'utils/Constants';
 
 import { AddExpenseValidationSchema } from '../../utils/ValidationSchemas';
+import jwt from 'jwtservice/jwtService';
+import { useNavigate } from 'react-router';
 
 const initialValues = {
     paymentMethod: '',
     tid: '',
     amount: '',
     date: '',
-    time: '',
     details: ''
 };
 
 function AddExpense() {
     const theme = useTheme();
+    const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
     const onSubmit = (values) => {
         try {
-            values.time = format(values['time']['$d'], 'h:mm a');
-            console.log('values');
-            console.log(values);
-            setErrorMessage('');
-            setIsError(false);
+            setIsLoading(true);
+            jwt.createExpense(values)
+                .then((res) => {
+                    setIsLoading(false);
+                    setErrorMessage('');
+                    setIsError(false);
+                    alert('Expense Added');
+                    navigate('/dashboard/completed-expenses');
+                })
+                .catch((err) => {
+                    setErrorMessage(err?.response?.data?.message);
+                    setIsError(true);
+                    setIsLoading(false);
+                });
         } catch (e) {
             setErrorMessage(e.message);
             setIsError(true);
         }
+    };
+
+    const handlePaymentMethod = (event, setFieldValue) => {
+        setFieldValue('paymentMethod', event.target.value);
+        event.target.value === 'net' && setFieldValue('tid', '');
     };
 
     return (
@@ -53,6 +65,30 @@ function AddExpense() {
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
+                                    error={Boolean(touched.details && errors.details)}
+                                    sx={{ ...theme.typography.customInput }}
+                                >
+                                    <InputLabel> Expense Details </InputLabel>
+                                    <OutlinedInput
+                                        id="details"
+                                        name="details"
+                                        type="text"
+                                        value={values.details}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        label="Details"
+                                        inputProps={{ min: 1 }}
+                                    />
+                                    {touched.details && errors.details && (
+                                        <FormHelperText error id="standard-weight-helper-text-sale-rate">
+                                            {errors.details}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                <FormControl
+                                    fullWidth
                                     error={Boolean(touched.paymentMethod && errors.paymentMethod)}
                                     sx={{ ...theme.typography.customInput }}
                                 >
@@ -63,7 +99,7 @@ function AddExpense() {
                                         type="text"
                                         value={values.paymentMethod}
                                         onBlur={handleBlur}
-                                        onChange={(event) => handleChange(event)}
+                                        onChange={(event) => handlePaymentMethod(event, setFieldValue)}
                                         label="Select Payment Method"
                                         sx={{ paddingTop: '15px' }}
                                     >
@@ -78,9 +114,11 @@ function AddExpense() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12} md={4} lg={4}>
                                 <FormControl fullWidth error={Boolean(touched.tid && errors.tid)} sx={{ ...theme.typography.customInput }}>
-                                    <InputLabel> TID </InputLabel>
+                                    <InputLabel> {values.paymentMethod === 'cheque' ? <>Cheque #</> : <>TID</>} </InputLabel>
                                     <OutlinedInput
                                         id="tid"
                                         name="tid"
@@ -88,8 +126,9 @@ function AddExpense() {
                                         value={values.tid}
                                         onBlur={handleBlur}
                                         onChange={handleChange}
-                                        label="TID"
+                                        label={values.paymentMethod === 'cheque' ? 'Cheque #' : 'TID'}
                                         sx={{ paddingTop: '5px' }}
+                                        disabled={values.paymentMethod === 'net'}
                                     />
                                     {touched.tid && errors.tid && (
                                         <FormHelperText error id="standard-weight-helper-text-tid">
@@ -98,9 +137,7 @@ function AddExpense() {
                                     )}
                                 </FormControl>
                             </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                            <Grid item xs={12} sm={12} md={4} lg={4}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.amount && errors.amount)}
@@ -115,8 +152,8 @@ function AddExpense() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Amount"
-                                        inputProps={{ min: 0 }}
-                                        sx={{ paddingTop: '15px' }}
+                                        inputProps={{ min: 1 }}
+                                        sx={{ paddingTop: '5px' }}
                                     />
                                     {touched.amount && errors.amount && (
                                         <FormHelperText error id="standard-weight-helper-text-amount">
@@ -125,7 +162,7 @@ function AddExpense() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                            <Grid item xs={12} sm={12} md={4} lg={4}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.date && errors.date)}
@@ -140,60 +177,11 @@ function AddExpense() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Date"
-                                        sx={{ paddingTop: '15px' }}
+                                        sx={{ paddingTop: '5px' }}
                                     />
                                     {touched.date && errors.date && (
                                         <FormHelperText error id="standard-weight-helper-text-date">
                                             {errors.date}
-                                        </FormHelperText>
-                                    )}
-                                </FormControl>
-                            </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                <FormControl
-                                    fullWidth
-                                    error={Boolean(touched.time && errors.time)}
-                                    sx={{ ...theme.typography.customInput }}
-                                >
-                                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                        <DemoContainer components={['TimePicker', 'TimePicker']}>
-                                            <TimePicker
-                                                label="Time"
-                                                value={values.time}
-                                                onChange={(value) => setFieldValue('time', value)}
-                                                sx={{ width: '100%' }}
-                                            />
-                                            {touched.time && errors.time && (
-                                                <FormHelperText error id="standard-weight-helper-text-sale-rate">
-                                                    {errors.time}
-                                                </FormHelperText>
-                                            )}
-                                        </DemoContainer>
-                                    </LocalizationProvider>
-                                </FormControl>
-                            </Grid>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
-                                <FormControl
-                                    fullWidth
-                                    error={Boolean(touched.details && errors.details)}
-                                    sx={{ ...theme.typography.customInput }}
-                                >
-                                    <InputLabel> Details </InputLabel>
-                                    <OutlinedInput
-                                        id="details"
-                                        name="details"
-                                        type="text"
-                                        value={values.details}
-                                        onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        label="Details"
-                                        inputProps={{ min: 0 }}
-                                    />
-                                    {touched.details && errors.details && (
-                                        <FormHelperText error id="standard-weight-helper-text-sale-rate">
-                                            {errors.details}
                                         </FormHelperText>
                                     )}
                                 </FormControl>

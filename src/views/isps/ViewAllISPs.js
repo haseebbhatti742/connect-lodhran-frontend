@@ -39,7 +39,7 @@ function ViewAllISPs() {
                     ) : (
                         <>
                             {isps.map((isp, index) => (
-                                <Grid item lg={4} md={4} sm={4} xs={12}>
+                                <Grid key={index} item lg={4} md={4} sm={4} xs={12}>
                                     <ISPCard key={index} isp={isp} isLoading={isLoading} />
                                 </Grid>
                             ))}

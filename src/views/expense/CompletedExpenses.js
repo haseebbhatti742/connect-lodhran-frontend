@@ -6,56 +6,35 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import { Alert, Button, FormControl, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
-import { THEME_COLOR_DARK, THEME_COLOR_LIGHT } from 'utils/Constants';
+import { Alert, FormControl, Grid, InputLabel, OutlinedInput } from '@mui/material';
+import { THEME_COLOR_DARK, THEME_COLOR_TINT } from 'utils/Constants';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import jwt from 'jwtservice/jwtService';
 import moment from 'moment';
 import { getPaymentMethodNameByKey } from 'utils/Functions';
+import { useNavigate } from 'react-router';
 import TotalIncomeDarkCard from 'views/dashboard/Default/TotalIncomeDarkCard';
 
-function createData(sr, entryDate, userId, packageName, paymentMethod, tid, saleRate, expiryDate) {
-    return { sr, entryDate, userId, packageName, paymentMethod, tid, saleRate, expiryDate };
+function createData(staff, paymentMethod, tid, amount, date, details, status) {
+    return { staff, paymentMethod, tid, amount, date, details, status };
 }
 
-const deletePackage = (id) => {
-    console.log(id);
-};
-
-const DeleteButton = ({ id }) => {
-    return (
-        <Button variant="contained" color="error" onClick={() => deletePackage(id)}>
-            Delete
-        </Button>
-    );
-};
-
-export default function AllEntries() {
+export default function CompletedExpenses() {
+    const navigate = useNavigate();
     const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [rows, setRows] = useState([]);
-
-    const [isps, setIsps] = useState([]);
-    const [ispSelected, setIspSelected] = useState('');
-    const [startDate, setStartDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
-    const [endDate, setEndDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
-    const [total, setTotal] = useState(0);
-    const [colorBg, setColorBg] = useState(THEME_COLOR_LIGHT);
 
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const style = { backgroundColor: colorBg, color: 'white' };
+    const [startDate, setStartDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
+    const [endDate, setEndDate] = useState(moment(new Date()).format('YYYY-MM-DD'));
+    const [total, setTotal] = useState(0);
 
-    useEffect(() => {
-        getIsps();
-    }, []);
-
-    useEffect(() => {
-        ispSelected !== '' && getEntries();
-    }, [startDate, endDate, ispSelected]);
+    const style = { backgroundColor: THEME_COLOR_DARK, color: 'white' };
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -66,46 +45,34 @@ export default function AllEntries() {
         setPage(0);
     };
 
-    const getEntries = () => {
+    useEffect(() => {
+        getCompletedExpenses();
+    }, [startDate, endDate]);
+
+    const getCompletedExpenses = () => {
         setIsLoading(true);
-        jwt.getAllCompletedEntries({
-            isp: ispSelected,
+        jwt.getCompletedExpenses({
             startDate: startDate,
             endDate: startDate !== endDate ? endDate : ''
         })
             .then((res) => {
+                console.log(res);
                 let rowsData = [];
-                res?.data?.entries?.map((item, index) =>
+                res?.data?.expenses?.map((item) =>
                     rowsData.push(
                         createData(
-                            index + 1,
-                            moment(item?.entryDate).format('DD/MM/YYYY'),
-                            item?.userId,
-                            item?.package?.name,
+                            item?.staff?.fullname,
                             getPaymentMethodNameByKey(item?.paymentMethod),
                             item?.tid,
-                            item?.saleRate,
-                            moment(item?.expiryDate).format('DD/MM/YYYY')
+                            item?.amount,
+                            moment(item?.date).format('DD/MM/YYYY'),
+                            item?.details,
+                            item?.status
                         )
                     )
                 );
                 setRows(rowsData);
                 setTotal(res?.data?.total);
-                setColorBg(res?.data?.entries[0]?.isp?.color);
-                setIsLoading(false);
-                setIsError(false);
-            })
-            .catch((err) => {
-                setErrorMessage(err?.response?.data?.message);
-                setIsError(true);
-                setIsLoading(false);
-            });
-    };
-
-    const getIsps = () => {
-        jwt.getAllIsps()
-            .then((res) => {
-                setIsps(res?.data);
                 setIsLoading(false);
                 setIsError(false);
             })
@@ -146,38 +113,17 @@ export default function AllEntries() {
                             />
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12} sm={12} md={6} lg={6}>
-                        <FormControl fullWidth>
-                            <InputLabel> Select ISP </InputLabel>
-                            <Select
-                                id="isp"
-                                name="isp"
-                                type="text"
-                                value={ispSelected}
-                                onChange={(event) => setIspSelected(event.target.value)}
-                                label="Select ISP"
-                            >
-                                {isps.map((isp, index) => (
-                                    <MenuItem key={index} value={isp.id}>
-                                        {isp.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                    </Grid>
                 </Grid>
             </form>
             <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={12} sm={12} md={3} lg={3}>
-                    <TotalIncomeDarkCard isLoading={false} total={total} />
+                    <TotalIncomeDarkCard isLoading={false} title="Total Expense" total={total} />
                 </Grid>
             </Grid>
-            <Paper sx={{ width: '100%', overflow: 'hidden', mt: 5 }}>
+            <Paper sx={{ width: '100%', overflow: 'hidden', mt: 4 }}>
                 {isLoading && <h3>Loading...!</h3>}
                 {isError ? (
                     <Alert severity="error">{errorMessage}</Alert>
-                ) : ispSelected === '' ? (
-                    <Alert severity="error">Please Select an ISP</Alert>
                 ) : (
                     !isLoading && (
                         <>
@@ -187,26 +133,29 @@ export default function AllEntries() {
                                         <TableRow>
                                             <TableCell style={style}>Sr.</TableCell>
                                             <TableCell style={style}>Date</TableCell>
-                                            <TableCell style={style}>User Id</TableCell>
-                                            <TableCell style={style}>Package</TableCell>
-                                            <TableCell style={style}>Payment Method</TableCell>
-                                            <TableCell style={style}>TID</TableCell>
+                                            <TableCell style={style}>Details</TableCell>
                                             <TableCell style={style}>Amount</TableCell>
-                                            <TableCell style={style}>Expiry Date</TableCell>
+                                            <TableCell style={style}>Payment Method</TableCell>
+                                            <TableCell style={style}>TID/Cheque#</TableCell>
+                                            <TableCell style={style}>Staff</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                                             return (
-                                                <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                                                <TableRow
+                                                    role="checkbox"
+                                                    tabIndex={-1}
+                                                    key={index}
+                                                    sx={{ backgroundColor: row?.status === 'pending' ? '#FDDA0D' : 'white' }}
+                                                >
                                                     <TableCell>{index + 1}</TableCell>
-                                                    <TableCell>{row?.entryDate}</TableCell>
-                                                    <TableCell>{row?.userId}</TableCell>
-                                                    <TableCell>{row?.packageName}</TableCell>
+                                                    <TableCell>{row?.date}</TableCell>
+                                                    <TableCell>{row?.details}</TableCell>
+                                                    <TableCell>{row?.status !== 'pending' ? row?.amount : 0}</TableCell>
                                                     <TableCell>{row?.paymentMethod}</TableCell>
                                                     <TableCell>{row?.tid}</TableCell>
-                                                    <TableCell>{row?.saleRate}</TableCell>
-                                                    <TableCell>{row?.expiryDate}</TableCell>
+                                                    <TableCell>{row?.staff}</TableCell>
                                                 </TableRow>
                                             );
                                         })}

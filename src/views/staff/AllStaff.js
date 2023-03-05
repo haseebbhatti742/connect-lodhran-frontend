@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import { Alert, Button } from '@mui/material';
-import { THEME_COLOR_LIGHT } from 'utils/Constants';
+import { STAFF_TYPES, THEME_COLOR_LIGHT } from 'utils/Constants';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import jwt from 'jwtservice/jwtService';
@@ -38,8 +38,8 @@ const columns = [
     }
 ];
 
-function createData(fullname, email, cnic, mobile, address) {
-    return { fullname, email, cnic, mobile, address };
+function createData(fullname, type, share, email, cnic, mobile, address) {
+    return { fullname, type, share, email, cnic, mobile, address };
 }
 
 const deletePackage = (id) => {
@@ -63,6 +63,8 @@ export default function AllStaff() {
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
+    const style = { backgroundColor: THEME_COLOR_LIGHT, color: 'white' };
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -78,7 +80,9 @@ export default function AllStaff() {
             .then((res) => {
                 setIsLoading(false);
                 let rowsData = [];
-                res?.data?.map((item) => rowsData.push(createData(item?.fullname, item?.email, item?.cnic, item?.mobile, item?.address)));
+                res?.data?.map((item) =>
+                    rowsData.push(createData(item?.fullname, item?.type, item?.share, item?.email, item?.cnic, item?.mobile, item?.address))
+                );
                 setRows(rowsData);
             })
             .catch((err) => {
@@ -99,29 +103,31 @@ export default function AllStaff() {
                         <Table stickyHeader aria-label="sticky table">
                             <TableHead>
                                 <TableRow>
-                                    {columns.map((column) => (
-                                        <TableCell
-                                            key={column.id}
-                                            align={column.align}
-                                            style={{ minWidth: column.minWidth, backgroundColor: THEME_COLOR_LIGHT, color: 'white' }}
-                                        >
-                                            {column.label}
-                                        </TableCell>
-                                    ))}
+                                    <TableCell style={style}>Sr.</TableCell>
+                                    <TableCell style={style}>Name</TableCell>
+                                    <TableCell style={style}>Type</TableCell>
+                                    <TableCell style={style}>Share</TableCell>
+                                    <TableCell style={style}>Email</TableCell>
+                                    <TableCell style={style}>Mobile</TableCell>
+                                    <TableCell style={style}>CNIC</TableCell>
+                                    <TableCell style={style}>Address</TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => {
+                                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
                                     return (
-                                        <TableRow hover role="checkbox" tabIndex={-1} key={row.code}>
-                                            {columns.map((column) => {
-                                                const value = row[column.id];
-                                                return (
-                                                    <TableCell key={column.id} align={column.align}>
-                                                        {column.format && typeof value === 'number' ? column.format(value) : value}
-                                                    </TableCell>
-                                                );
-                                            })}
+                                        <TableRow
+                                            key={index}
+                                            style={{ backgroundColor: row?.type === STAFF_TYPES.partner ? '#f0f0d2' : 'white' }}
+                                        >
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>{row?.fullname}</TableCell>
+                                            <TableCell>{row?.type}</TableCell>
+                                            <TableCell>{row?.share}</TableCell>
+                                            <TableCell>{row?.email}</TableCell>
+                                            <TableCell>{row?.mobile}</TableCell>
+                                            <TableCell>{row?.cnic}</TableCell>
+                                            <TableCell>{row?.address}</TableCell>
                                         </TableRow>
                                     );
                                 })}

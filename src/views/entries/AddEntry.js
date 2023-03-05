@@ -3,6 +3,8 @@ import { useTheme } from '@mui/material/styles';
 import { Box } from '@mui/system';
 import { Field, Formik } from 'formik';
 import jwt from 'jwtservice/jwtService';
+import moment from 'moment';
+import { useRef } from 'react';
 import { useEffect } from 'react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
@@ -21,6 +23,8 @@ function AddEntry() {
     const [errorMessage, setErrorMessage] = useState('');
     const [colorBg, setColorBg] = useState(THEME_COLOR_DARK);
 
+    const startDateRef = useRef(null);
+
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -38,14 +42,15 @@ function AddEntry() {
             });
     }, []);
 
-    // const { ispId, color } = useLocation().state;
     const initialValues = {
+        entryDate: '',
         isp: '',
         userId: '',
         package: '',
         paymentMethod: '',
         tid: '',
         saleRate: '',
+        startDate: '',
         expiryDate: ''
     };
 
@@ -84,6 +89,14 @@ function AddEntry() {
         }
     };
 
+    const handleStartDate = (event, setFieldValue) => {
+        const givenDate = new Date(event.target.value);
+        const oneMonthLaterDate = new Date(givenDate.getFullYear(), givenDate.getMonth() + 1, givenDate.getDate());
+        setFieldValue('startDate', event.target.value);
+        setFieldValue('expiryDate', moment(oneMonthLaterDate).format('YYYY-MM-DD'));
+        startDateRef.current.blur();
+    };
+
     const getPackages = (isp) => {
         setIsLoading(true);
         jwt.getAllPackages(isp)
@@ -108,28 +121,57 @@ function AddEntry() {
             <Formik initialValues={initialValues} validationSchema={CreateEntryValidationSchema} onSubmit={onSubmit}>
                 {({ values, errors, isValid, touched, handleChange, handleBlur, handleSubmit, setFieldValue }) => (
                     <form onSubmit={handleSubmit}>
-                        <FormControl fullWidth error={Boolean(touched.isp && errors.isp)} sx={{ ...theme.typography.customInput }}>
-                            <InputLabel> Select User's ISP </InputLabel>
-                            <Select
-                                id="isp"
-                                name="isp"
-                                type="text"
-                                value={values.isp}
-                                onBlur={handleBlur}
-                                onChange={(event) => handleIspSelectChange(event, setFieldValue)}
-                                label="User's ISP"
-                                sx={{ paddingTop: '15px' }}
-                            >
-                                {isps.map((isp) => (
-                                    <MenuItem value={isp.id}>{isp.name}</MenuItem>
-                                ))}
-                            </Select>
-                            {touched.isp && errors.isp && (
-                                <FormHelperText error id="standard-weight-helper-text-name">
-                                    {errors.isp}
-                                </FormHelperText>
-                            )}
-                        </FormControl>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                <FormControl
+                                    fullWidth
+                                    error={Boolean(touched.entryDate && errors.entryDate)}
+                                    sx={{ ...theme.typography.customInput }}
+                                >
+                                    <InputLabel> Entry Date </InputLabel>
+                                    <OutlinedInput
+                                        id="entryDate"
+                                        name="entryDate"
+                                        type="date"
+                                        value={values.entryDate}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        label="Entry Date"
+                                        sx={{ paddingTop: '10px' }}
+                                        inputProps={{ max: moment(new Date()).format('YYYY-MM-DD') }}
+                                    />
+                                    {touched.entryDate && errors.entryDate && (
+                                        <FormHelperText error id="standard-weight-helper-text-entryDate">
+                                            {errors.entryDate}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                <FormControl fullWidth error={Boolean(touched.isp && errors.isp)} sx={{ ...theme.typography.customInput }}>
+                                    <InputLabel> Select User's ISP </InputLabel>
+                                    <Select
+                                        id="isp"
+                                        name="isp"
+                                        type="text"
+                                        value={values.isp}
+                                        onBlur={handleBlur}
+                                        onChange={(event) => handleIspSelectChange(event, setFieldValue)}
+                                        label="User's ISP"
+                                        sx={{ paddingTop: '20px' }}
+                                    >
+                                        {isps.map((isp) => (
+                                            <MenuItem value={isp.id}>{isp.name}</MenuItem>
+                                        ))}
+                                    </Select>
+                                    {touched.isp && errors.isp && (
+                                        <FormHelperText error id="standard-weight-helper-text-name">
+                                            {errors.isp}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                        </Grid>
                         <Grid container spacing={2}>
                             <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
@@ -146,7 +188,8 @@ function AddEntry() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="User Id"
-                                        inputProps={{ min: 0 }}
+                                        inputProps={{ min: 1 }}
+                                        sx={{ paddingTop: '5px' }}
                                     />
                                     {touched.userId && errors.userId && (
                                         <FormHelperText error id="standard-weight-helper-text-userId">
@@ -185,7 +228,7 @@ function AddEntry() {
                             </Grid>
                         </Grid>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                            <Grid item xs={12} sm={12} md={4} lg={4}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.paymentMethod && errors.paymentMethod)}
@@ -213,7 +256,7 @@ function AddEntry() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                            <Grid item xs={12} sm={12} md={4} lg={4}>
                                 <FormControl fullWidth error={Boolean(touched.tid && errors.tid)} sx={{ ...theme.typography.customInput }}>
                                     <InputLabel> TID </InputLabel>
                                     <OutlinedInput
@@ -224,7 +267,8 @@ function AddEntry() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="TID"
-                                        inputProps={{ min: 0 }}
+                                        sx={{ paddingTop: '5px' }}
+                                        inputProps={{ min: 1 }}
                                         disabled={values.paymentMethod === 'net' || values.paymentMethod === 'pending'}
                                     />
                                     {touched.tid && errors.tid && (
@@ -234,9 +278,7 @@ function AddEntry() {
                                     )}
                                 </FormControl>
                             </Grid>
-                        </Grid>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                            <Grid item xs={12} sm={12} md={4} lg={4}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.saleRate && errors.saleRate)}
@@ -251,13 +293,40 @@ function AddEntry() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Sale Rate"
-                                        inputProps={{ min: 0 }}
-                                        sx={{ paddingTop: '15px' }}
+                                        inputRef={startDateRef}
+                                        inputProps={{ min: 1 }}
+                                        sx={{ paddingTop: '5px' }}
                                         disabled={values.paymentMethod === 'pending'}
                                     />
                                     {touched.saleRate && errors.saleRate && (
                                         <FormHelperText error id="standard-weight-helper-text-sale-rate">
                                             {errors.saleRate}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                <FormControl
+                                    fullWidth
+                                    error={Boolean(touched.startDate && errors.startDate)}
+                                    sx={{ ...theme.typography.customInput }}
+                                >
+                                    <InputLabel> Start Date </InputLabel>
+                                    <OutlinedInput
+                                        id="startDate"
+                                        name="startDate"
+                                        type="date"
+                                        value={values.startDate}
+                                        onBlur={handleBlur}
+                                        onChange={(e) => handleStartDate(e, setFieldValue)}
+                                        label="Expriy Date"
+                                        sx={{ paddingTop: '10px' }}
+                                    />
+                                    {touched.startDate && errors.startDate && (
+                                        <FormHelperText error id="standard-weight-helper-text-startDate">
+                                            {errors.startDate}
                                         </FormHelperText>
                                     )}
                                 </FormControl>
@@ -277,7 +346,7 @@ function AddEntry() {
                                         onBlur={handleBlur}
                                         onChange={handleChange}
                                         label="Expriy Date"
-                                        sx={{ paddingTop: '15px' }}
+                                        sx={{ paddingTop: '10px' }}
                                     />
                                     {touched.expiryDate && errors.expiryDate && (
                                         <FormHelperText error id="standard-weight-helper-text-expiryDate">
@@ -289,7 +358,7 @@ function AddEntry() {
                         </Grid>
                         <label htmlFor="sendWelcomeMessage">
                             <Field id="sendWelcomeMessage" name="sendWelcomeMessage" type="checkbox" checked={values.sendWelcomeMessage} />
-                            Send SMS SLert
+                            Send SMS Alert
                         </label>
                         <Box sx={{ mt: 2 }}>
                             <Grid sx={{ width: '100%' }}>

@@ -75,7 +75,7 @@ function AddISP() {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 label="ISP VLAN"
-                                inputProps={{ min: 0 }}
+                                inputProps={{ min: 1 }}
                             />
                             {touched.vlan && errors.vlan && (
                                 <FormHelperText error id="standard-weight-helper-text-isp-vlan">
@@ -97,7 +97,7 @@ function AddISP() {
                                 onBlur={handleBlur}
                                 onChange={handleChange}
                                 label="Opening Balance"
-                                inputProps={{ min: 0 }}
+                                inputProps={{ min: 1 }}
                             />
                             {touched.openingBalance && errors.openingBalance && (
                                 <FormHelperText error id="standard-weight-helper-text-isp-openingBalance">

@@ -20,6 +20,20 @@ const expenses = {
                     type: 'item',
                     url: '/dashboard/add-expense',
                     target: false
+                },
+                {
+                    id: 'expenses',
+                    title: 'All Expenses',
+                    type: 'item',
+                    url: '/dashboard/all-expenses',
+                    target: false
+                },
+                {
+                    id: 'expenses',
+                    title: 'Pending Expenses',
+                    type: 'item',
+                    url: '/dashboard/pending-expenses',
+                    target: false
                 }
             ]
         }

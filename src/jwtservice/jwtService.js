@@ -28,17 +28,18 @@ class JwtService {
             }
         );
 
-        axios.interceptors.response.use(config, (error) => {
-            console.log('jwt error');
-            console.log(error);
-            if (error?.code === 'ERR_NETWORK') {
-                this.setIsLogin(false);
-                this.removeToken();
-                this.removeRefreshtoken();
-                this.removeUser();
-                window.location.replace('/api-error');
-            }
-        });
+        // axios.interceptors.response.use(config, (error) => {
+        //     console.log('jwt error');
+        //     console.log(error);
+        //     if (error?.code === 'ERR_NETWORK') {
+        //         this.setIsLogin(false);
+        //         this.removeToken();
+        //         this.removeRefreshtoken();
+        //         this.removeUser();
+        //         window.location.replace('/api-error');
+        //     }
+        //     Promise.reject(error);
+        // });
     }
 
     onAccessTokenFetched(accessToken) {
@@ -135,6 +136,14 @@ class JwtService {
         return axios.get(`${this.jwtConfig.packageEndpoint}/by-isp/${isp}`);
     }
 
+    updatePackage(id, payload) {
+        return axios.patch(`${this.jwtConfig.packageEndpoint}/${id}`, payload);
+    }
+
+    deletePackage(id) {
+        return axios.delete(`${this.jwtConfig.packageEndpoint}/${isp}`);
+    }
+
     createUser(payload) {
         return axios.post(this.jwtConfig.userEndpoint, payload);
     }
@@ -173,6 +182,26 @@ class JwtService {
 
     createInvoice(payload) {
         return axios.post(this.jwtConfig.invoiceEndpoint, payload);
+    }
+
+    createExpense(payload) {
+        return axios.post(this.jwtConfig.expenseEndpoint, payload);
+    }
+
+    getCompletedExpenses(payload) {
+        return axios.post(`${this.jwtConfig.expenseEndpoint}/completed`, payload);
+    }
+
+    getPendingExpenses() {
+        return axios.get(`${this.jwtConfig.expenseEndpoint}/pending`);
+    }
+
+    approveExpense(id) {
+        return axios.get(`${this.jwtConfig.expenseEndpoint}/approve/${id}`);
+    }
+
+    deleteExpense(id) {
+        return axios.delete(`${this.jwtConfig.expenseEndpoint}/${id}`);
     }
 }
 
