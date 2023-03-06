@@ -39,7 +39,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME LIGHT CARD ||============================== //
 
-const TotalIncomeLightCard = ({ isLoading, total }) => {
+const TotalIncomeLightCard = ({ isLoading, total, title = 'Total Income' }) => {
     const theme = useTheme();
 
     return (
@@ -79,7 +79,7 @@ const TotalIncomeLightCard = ({ isLoading, total }) => {
                                                 mt: 0.5
                                             }}
                                         >
-                                            Total Income
+                                            {title}
                                         </Typography>
                                     }
                                 />
