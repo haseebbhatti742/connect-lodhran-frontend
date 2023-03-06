@@ -79,6 +79,7 @@ export const SendInvoiceValidationSchema = Yup.object().shape({
 });
 
 export const AddExpenseValidationSchema = Yup.object().shape({
+    spentBy: Yup.string().required('Spent By is required'),
     paymentMethod: Yup.string().required('Payment Method is required'),
     tid: Yup.string(),
     amount: Yup.number().required('Amount is required'),

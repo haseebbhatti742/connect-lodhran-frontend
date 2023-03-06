@@ -180,6 +180,10 @@ class JwtService {
         return axios.get(this.jwtConfig.staffEndpoint);
     }
 
+    getAllPartners() {
+        return axios.get(`${this.jwtConfig.staffEndpoint}/getAllPartners`);
+    }
+
     createInvoice(payload) {
         return axios.post(this.jwtConfig.invoiceEndpoint, payload);
     }

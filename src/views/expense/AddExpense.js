@@ -1,6 +1,5 @@
 import { useTheme } from '@emotion/react';
 import { Alert, FormControl, FormHelperText, Grid, InputLabel, MenuItem, OutlinedInput, Select } from '@mui/material';
-import { format } from 'date-fns';
 import { Box } from '@mui/system';
 import { Formik } from 'formik';
 import { useState } from 'react';
@@ -10,8 +9,10 @@ import { PAYMENT_METHODS } from 'utils/Constants';
 import { AddExpenseValidationSchema } from '../../utils/ValidationSchemas';
 import jwt from 'jwtservice/jwtService';
 import { useNavigate } from 'react-router';
+import { useEffect } from 'react';
 
 const initialValues = {
+    spentBy: '',
     paymentMethod: '',
     tid: '',
     amount: '',
@@ -25,6 +26,11 @@ function AddExpense() {
     const [isLoading, setIsLoading] = useState(false);
     const [isError, setIsError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [partners, setPartners] = useState([]);
+
+    useEffect(() => {
+        getAllPartners();
+    }, []);
 
     const onSubmit = (values) => {
         try {
@@ -35,7 +41,7 @@ function AddExpense() {
                     setErrorMessage('');
                     setIsError(false);
                     alert('Expense Added');
-                    navigate('/dashboard/completed-expenses');
+                    navigate('/dashboard/all-expenses');
                 })
                 .catch((err) => {
                     setErrorMessage(err?.response?.data?.message);
@@ -51,6 +57,27 @@ function AddExpense() {
     const handlePaymentMethod = (event, setFieldValue) => {
         setFieldValue('paymentMethod', event.target.value);
         event.target.value === 'net' && setFieldValue('tid', '');
+    };
+
+    const getAllPartners = () => {
+        try {
+            setIsLoading(true);
+            jwt.getAllPartners()
+                .then((res) => {
+                    setIsLoading(false);
+                    setErrorMessage('');
+                    setIsError(false);
+                    setPartners(res?.data);
+                })
+                .catch((err) => {
+                    setErrorMessage(err?.response?.data?.message);
+                    setIsError(true);
+                    setIsLoading(false);
+                });
+        } catch (e) {
+            setErrorMessage(e.message);
+            setIsError(true);
+        }
     };
 
     return (
@@ -116,7 +143,7 @@ function AddExpense() {
                             </Grid>
                         </Grid>
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={12} md={4} lg={4}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl fullWidth error={Boolean(touched.tid && errors.tid)} sx={{ ...theme.typography.customInput }}>
                                     <InputLabel> {values.paymentMethod === 'cheque' ? <>Cheque #</> : <>TID</>} </InputLabel>
                                     <OutlinedInput
@@ -137,7 +164,7 @@ function AddExpense() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.amount && errors.amount)}
@@ -162,7 +189,38 @@ function AddExpense() {
                                     )}
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={12} sm={12} md={4} lg={4}>
+                        </Grid>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
+                                <FormControl
+                                    fullWidth
+                                    error={Boolean(touched.spentBy && errors.spentBy)}
+                                    sx={{ ...theme.typography.customInput }}
+                                >
+                                    <InputLabel> Spent By </InputLabel>
+                                    <Select
+                                        id="spentBy"
+                                        name="spentBy"
+                                        type="text"
+                                        value={values.spentBy}
+                                        onBlur={handleBlur}
+                                        onChange={handleChange}
+                                        label="Spent By"
+                                        sx={{ paddingTop: '15px' }}
+                                    >
+                                        <MenuItem value="company">Company</MenuItem>
+                                        {partners.map((item) => (
+                                            <MenuItem value={item.id}>{item.fullname}</MenuItem>
+                                        ))}
+                                    </Select>
+                                    {touched.spentBy && errors.spentBy && (
+                                        <FormHelperText error id="standard-weight-helper-text-spentBy">
+                                            {errors.spentBy}
+                                        </FormHelperText>
+                                    )}
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={12} md={6} lg={6}>
                                 <FormControl
                                     fullWidth
                                     error={Boolean(touched.date && errors.date)}

@@ -16,8 +16,8 @@ import { getPaymentMethodNameByKey } from 'utils/Functions';
 import { useNavigate } from 'react-router';
 import TotalIncomeDarkCard from 'views/dashboard/Default/TotalIncomeDarkCard';
 
-function createData(staff, paymentMethod, tid, amount, date, details, status) {
-    return { staff, paymentMethod, tid, amount, date, details, status };
+function createData(staff, paymentMethod, tid, amount, date, details, spentBy, status) {
+    return { staff, paymentMethod, tid, amount, date, details, spentBy, status };
 }
 
 export default function CompletedExpenses() {
@@ -67,6 +67,7 @@ export default function CompletedExpenses() {
                             item?.amount,
                             moment(item?.date).format('DD/MM/YYYY'),
                             item?.details,
+                            item?.spentBy,
                             item?.status
                         )
                     )
@@ -134,6 +135,7 @@ export default function CompletedExpenses() {
                                             <TableCell style={style}>Sr.</TableCell>
                                             <TableCell style={style}>Date</TableCell>
                                             <TableCell style={style}>Details</TableCell>
+                                            <TableCell style={style}>Spent By</TableCell>
                                             <TableCell style={style}>Amount</TableCell>
                                             <TableCell style={style}>Payment Method</TableCell>
                                             <TableCell style={style}>TID/Cheque#</TableCell>
@@ -152,6 +154,11 @@ export default function CompletedExpenses() {
                                                     <TableCell>{index + 1}</TableCell>
                                                     <TableCell>{row?.date}</TableCell>
                                                     <TableCell>{row?.details}</TableCell>
+                                                    {typeof row?.spentBy === 'string' ? (
+                                                        <TableCell>Company</TableCell>
+                                                    ) : (
+                                                        <TableCell>{row?.spentBy?.fullname}</TableCell>
+                                                    )}
                                                     <TableCell>{row?.status !== 'pending' ? row?.amount : 0}</TableCell>
                                                     <TableCell>{row?.paymentMethod}</TableCell>
                                                     <TableCell>{row?.tid}</TableCell>
