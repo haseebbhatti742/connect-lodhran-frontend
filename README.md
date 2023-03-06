@@ -10,23 +10,6 @@ Frontend for the Connect Lodhran Portal
 
 ### npm start
 
-//complete payment (done)
-///only paymentMethod, tid, saleRate enbaled, baqi disabled, it will go to completed entries (done)
-///sms alert option (done)
-
-//create entry page per (done)
-///Send SMS Alert ka option add krna h (done)
-
-//create user page (done)
-///email dalni h (optional) (done)
-///print reciept (yes/no) with format
-
-//all entries page per
-///total show hoga (done)
-//in all entries page, add fiter of ISP (done)
-///jab tak ISP select na ho to entries load na hon (done)
-///date filters add krne hen (done)
-
 //invoices page (done)
 //create page per (isp, date, payment method, tid, amount, comments) (done)
 ///total show hoga
@@ -37,7 +20,3 @@ Frontend for the Connect Lodhran Portal
 
 //grand summary
 //current months data (income[sale rate se], invoice[purchase rate se], total users charged[legnth], profit[income-invoice])
-
-//manage expense option
-///(payment method, tid, amount, date, time, details, picture)
-///expense alert msg admin ko lazmi jana h
