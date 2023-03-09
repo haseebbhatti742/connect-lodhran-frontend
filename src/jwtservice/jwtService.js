@@ -207,6 +207,10 @@ class JwtService {
     deleteExpense(id) {
         return axios.delete(`${this.jwtConfig.expenseEndpoint}/${id}`);
     }
+
+    getSummary(payload) {
+        return axios.post(this.jwtConfig.summaryEndpoint, payload);
+    }
 }
 
 const jwt = new JwtService();

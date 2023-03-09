@@ -32,5 +32,8 @@ export default {
     invoiceEndpoint: `${BASE_URL}/invoice`,
 
     //expense endpoint
-    expenseEndpoint: `${BASE_URL}/expense`
+    expenseEndpoint: `${BASE_URL}/expense`,
+
+    //summary endpoint
+    summaryEndpoint: `${BASE_URL}/summary`
 };

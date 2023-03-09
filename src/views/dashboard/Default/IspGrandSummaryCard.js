@@ -3,72 +3,58 @@ import { useState } from 'react';
 
 // material-ui
 import { styled, useTheme } from '@mui/material/styles';
-import { Avatar, Box, Grid, Menu, MenuItem, Typography } from '@mui/material';
+import { Box, Grid, Typography } from '@mui/material';
 
 // project imports
 import MainCard from 'ui-component/cards/MainCard';
 import SkeletonIspGrandSummaryCard from 'ui-component/cards/Skeleton/IspGrandSummaryCard';
 
-// assets
-import EarningIcon from 'assets/images/icons/earning.svg';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import GetAppTwoToneIcon from '@mui/icons-material/GetAppOutlined';
-import FileCopyTwoToneIcon from '@mui/icons-material/FileCopyOutlined';
-import PictureAsPdfTwoToneIcon from '@mui/icons-material/PictureAsPdfOutlined';
-import ArchiveTwoToneIcon from '@mui/icons-material/ArchiveOutlined';
-
-const CardWrapper = styled(MainCard)(({ theme }) => ({
-    backgroundColor: theme.palette.secondary.dark,
-    // backgroundColor: 'black',
-    color: '#fff',
-    overflow: 'hidden',
-    position: 'relative',
-    '&:after': {
-        content: '""',
-        position: 'absolute',
-        width: 210,
-        height: 210,
-        background: theme.palette.secondary[800],
-        borderRadius: '50%',
-        top: -85,
-        right: -95,
-        [theme.breakpoints.down('sm')]: {
-            top: -105,
-            right: -140
-        }
-    },
-    '&:before': {
-        content: '""',
-        position: 'absolute',
-        width: 210,
-        height: 210,
-        background: theme.palette.secondary[800],
-        borderRadius: '50%',
-        top: -125,
-        right: -15,
-        opacity: 0.5,
-        [theme.breakpoints.down('sm')]: {
-            top: -155,
-            right: -70
-        }
-    }
-}));
-
 // ===========================|| DASHBOARD DEFAULT - EARNING CARD ||=========================== //
 
-const IspGrandSummaryCard = ({ isLoading }) => {
-    const theme = useTheme();
+const IspGrandSummaryCard = ({ isLoading, data }) => {
+    const cardItem = { zIndex: 10 };
+    const numberStyle = { fontSize: 24, fontWeight: 'bold' };
+    const nameStyle = { fontSize: 34, fontWeight: 'bold' };
 
-    const [anchorEl, setAnchorEl] = useState(null);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
+    const CardWrapper = styled(MainCard)(({ theme }) => ({
+        backgroundColor: data?.isp?.color,
+        // backgroundColor: 'black',
+        color: '#fff',
+        overflow: 'hidden',
+        position: 'relative',
+        myItem: {
+            zIndex: 999
+        },
+        '&:after': {
+            content: '""',
+            position: 'absolute',
+            width: 210,
+            height: 210,
+            background: '#e1e0de',
+            borderRadius: '50%',
+            top: -140,
+            right: -130,
+            [theme.breakpoints.down('sm')]: {
+                top: -105,
+                right: -140
+            }
+        },
+        '&:before': {
+            content: '""',
+            position: 'absolute',
+            width: 210,
+            height: 210,
+            background: data?.isp?.color,
+            borderRadius: '50%',
+            top: -155,
+            right: -70,
+            opacity: 0.5,
+            [theme.breakpoints.down('sm')]: {
+                top: -155,
+                right: -70
+            }
+        }
+    }));
 
     return (
         <>
@@ -77,44 +63,86 @@ const IspGrandSummaryCard = ({ isLoading }) => {
             ) : (
                 <CardWrapper border={false} content={false}>
                     <Box sx={{ p: 2.25 }}>
-                        <Grid container direction="column">
-                            {[1, 2, 3].map((item) => (
-                                <>
-                                <Grid item sm={}></Grid>
-                                    <Grid item>
-                                        <Grid container alignItems="center">
-                                            <Grid item>
-                                                <Typography sx={{ fontSize: '2.125rem', fontWeight: 500, mr: 1, mt: 1.75, mb: 0.75 }}>
-                                                    $500.00
-                                                </Typography>
-                                            </Grid>
-                                            <Grid item>
-                                                <Avatar
-                                                    sx={{
-                                                        cursor: 'pointer',
-                                                        ...theme.typography.smallAvatar,
-                                                        backgroundColor: theme.palette.secondary[200],
-                                                        color: theme.palette.secondary.dark
-                                                    }}
-                                                >
-                                                    <ArrowUpwardIcon fontSize="inherit" sx={{ transform: 'rotate3d(1, 1, 1, 45deg)' }} />
-                                                </Avatar>
-                                            </Grid>
+                        <Grid item xs={12}>
+                            <Typography sx={nameStyle}>{data?.isp?.name}</Typography>
+                        </Grid>
+                        <Grid container>
+                            <Grid item sx={cardItem} xs={12} sm={12} md={6} lg={6} xl={6}>
+                                <Grid item>
+                                    <Grid container alignItems="center">
+                                        <Grid item>
+                                            <Typography sx={numberStyle}>{data?.totalIncome}</Typography>
                                         </Grid>
                                     </Grid>
-                                    <Grid item sx={{ mb: 1.25 }}>
-                                        <Typography
-                                            sx={{
-                                                fontSize: '1rem',
-                                                fontWeight: 500,
-                                                color: theme.palette.secondary[200]
-                                            }}
-                                        >
-                                            Total Earning
-                                        </Typography>
+                                </Grid>
+                                <Grid item>
+                                    <Typography>Total Income</Typography>
+                                </Grid>
+                            </Grid>
+                            <Grid item sx={cardItem} xs={12} sm={12} md={6} lg={6} xl={6}>
+                                <Grid item>
+                                    <Grid container alignItems="center">
+                                        <Grid item>
+                                            <Typography sx={numberStyle}>{data?.totalInvoice}</Typography>
+                                        </Grid>
                                     </Grid>
-                                </>
-                            ))}
+                                </Grid>
+                                <Grid item>
+                                    <Typography>Total Invoice</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item sx={cardItem} xs={12} sm={12} md={6} lg={6} xl={6}>
+                                <Grid item>
+                                    <Grid container alignItems="center">
+                                        <Grid item>
+                                            <Typography sx={numberStyle}>{data?.totalProfit}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid item>
+                                    <Typography>Total Profit</Typography>
+                                </Grid>
+                            </Grid>
+                            <Grid item sx={cardItem} xs={12} sm={12} md={6} lg={6} xl={6}>
+                                <Grid item>
+                                    <Grid container alignItems="center">
+                                        <Grid item>
+                                            <Typography sx={numberStyle}>{data?.totalInvoiceSent}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid item>
+                                    <Typography>Invoice Sent</Typography>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                        <Grid container>
+                            <Grid item sx={cardItem} xs={12} sm={12} md={6} lg={6} xl={6}>
+                                <Grid item>
+                                    <Grid container alignItems="center">
+                                        <Grid item>
+                                            <Typography sx={numberStyle}>{data?.totalBalance}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid item>
+                                    <Typography>Total Balance</Typography>
+                                </Grid>
+                            </Grid>
+                            <Grid item sx={cardItem} xs={12} sm={12} md={6} lg={6} xl={6}>
+                                <Grid item>
+                                    <Grid container alignItems="center">
+                                        <Grid item>
+                                            <Typography sx={numberStyle}>{data?.totalEntryPending}</Typography>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                                <Grid item>
+                                    <Typography>Total Pending</Typography>
+                                </Grid>
+                            </Grid>
                         </Grid>
                     </Box>
                 </CardWrapper>

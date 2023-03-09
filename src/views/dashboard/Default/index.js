@@ -1,28 +1,56 @@
 import { useEffect, useState } from 'react';
 
 // material-ui
-import { Grid, MenuItem, Select } from '@mui/material';
+import { Divider, Grid, MenuItem, Select } from '@mui/material';
 
 // project imports
-import EarningCard from './EarningCard';
-import PopularCard from './PopularCard';
-import TotalOrderLineChartCard from './TotalOrderLineChartCard';
 import TotalIncomeDarkCard from './TotalIncomeDarkCard';
-import TotalIncomeLightCard from './TotalIncomeLightCard';
-import TotalGrowthBarChart from './TotalGrowthBarChart';
 import { gridSpacing } from 'store/constant';
 import IspGrandSummaryCard from './IspGrandSummaryCard';
+import jwt from 'jwtservice/jwtService';
+import RemainingProfitCard from './RemainingProfitCard';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
 
 const Dashboard = () => {
     const [isLoading, setLoading] = useState(false);
-
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
+    const [ispsData, setIspsData] = useState([]);
+    const [totalIncome, setTotalIncome] = useState(0);
+    const [companyExpense, setCompanyExpense] = useState(0);
+    const [companyProfit, setCompanyProfit] = useState(0);
+    const [partnersExpense, setPartnersExpense] = useState(0);
+    const [totalRemainingProfit, setTotalRemainingProfit] = useState(0);
+
     const startYear = 2020;
     const currentYear = new Date().getFullYear();
     const years = Array.from({ length: currentYear - startYear + 1 }, (_, index) => startYear + index);
+
+    useEffect(() => {
+        if (selectedMonth && selectedYear) {
+            getSummary(selectedMonth, selectedYear);
+        }
+    }, [selectedMonth, selectedYear]);
+
+    const getSummary = (month, year) => {
+        setLoading(true);
+        jwt.getSummary({ month, year })
+            .then((res) => {
+                console.log(res);
+                setIspsData(res?.data?.data);
+                setTotalIncome(res?.data?.totalIncome);
+                setCompanyExpense(res?.data?.companyExpense);
+                setCompanyProfit(res?.data?.companyProfit);
+                setPartnersExpense(res?.data?.partnersExpense);
+                setTotalRemainingProfit(res?.data?.totalRemainingProfit);
+                setLoading(false);
+            })
+            .catch((err) => {
+                console.log(err);
+                setLoading(false);
+            });
+    };
 
     return (
         <Grid container spacing={gridSpacing}>
@@ -65,30 +93,39 @@ const Dashboard = () => {
                                     ))}
                                 </Select>
                             </Grid>
-                            <Grid item sm={6} xs={6} md={6} lg={6}>
-                                <TotalIncomeDarkCard isLoading={isLoading} title="Total Profit" total={23000} />
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                    <Grid container item spacing={2}>
-                        <Grid item sm={3} xs={3} md={3} lg={3}>
-                            <TotalIncomeDarkCard isLoading={isLoading} title="Total Income" total={23000} />
-                        </Grid>
-                        <Grid item sm={3} xs={3} md={3} lg={3}>
-                            <TotalIncomeLightCard isLoading={isLoading} title="Total Entry" total={23000} />
-                        </Grid>
-                        <Grid item sm={3} xs={3} md={3} lg={3}>
-                            <TotalIncomeDarkCard isLoading={isLoading} title="Total Invoice" total={23000} />
-                        </Grid>
-                        <Grid item sm={3} xs={3} md={3} lg={3}>
-                            <TotalIncomeLightCard isLoading={isLoading} title="Total Balance" total={23000} />
                         </Grid>
                     </Grid>
                     <>
-                        <Grid item lg={3} md={4} sm={6} xs={12}>
-                            <IspGrandSummaryCard isLoading={isLoading} />
-                        </Grid>
+                        {ispsData.map((data, index) => (
+                            <Grid key={index} item xl={3} lg={4} md={4} sm={6} xs={12}>
+                                <IspGrandSummaryCard isLoading={isLoading} data={data} />
+                            </Grid>
+                        ))}
                     </>
+                    <Grid container item spacing={2}>
+                        <Grid item sm={3} xs={3} md={3} lg={3}>
+                            <TotalIncomeDarkCard isLoading={isLoading} title="Total Income" total={totalIncome} />
+                        </Grid>
+                        <Grid item sm={3} xs={3} md={3} lg={3}>
+                            <TotalIncomeDarkCard isLoading={isLoading} title="Company Expense" total={companyExpense} />
+                        </Grid>
+                        <Grid item sm={3} xs={3} md={3} lg={3}>
+                            <TotalIncomeDarkCard isLoading={isLoading} title="Company Profit" total={companyProfit} />
+                        </Grid>
+                        <Grid item sm={3} xs={3} md={3} lg={3}>
+                            <TotalIncomeDarkCard isLoading={isLoading} title="Partners Expense" total={partnersExpense} />
+                        </Grid>
+                    </Grid>
+                    <Grid container item spacing={2}>
+                        <Grid item sm={12} xs={12} md={3} lg={12}>
+                            <RemainingProfitCard
+                                color="red"
+                                isLoading={isLoading}
+                                title="Total Remaining Profit"
+                                total={totalRemainingProfit}
+                            />
+                        </Grid>
+                    </Grid>
                 </Grid>
             </Grid>
         </Grid>

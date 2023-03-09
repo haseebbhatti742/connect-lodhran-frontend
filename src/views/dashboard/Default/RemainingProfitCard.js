@@ -10,13 +10,12 @@ import TotalIncomeCard from 'ui-component/cards/Skeleton/TotalIncomeCard';
 
 // assets
 import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
-import { THEME_COLOR_DARK } from 'utils/Constants';
 import numeral from 'numeral';
-import numberToWords from 'number-to-words';
+import { display } from '@mui/system';
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme }) => ({
-    backgroundColor: theme.palette.primary.dark,
+    backgroundColor: 'red',
     color: theme.palette.primary.light,
     overflow: 'hidden',
     position: 'relative',
@@ -44,7 +43,7 @@ const CardWrapper = styled(MainCard)(({ theme }) => ({
 
 // ==============================|| DASHBOARD - TOTAL INCOME DARK CARD ||============================== //
 
-const TotalIncomeDarkCard = ({ isLoading, total, title = 'Total Income' }) => {
+const RemainingProfitCard = ({ isLoading, total, title = 'Total Income' }) => {
     const theme = useTheme();
     return (
         <>
@@ -55,32 +54,23 @@ const TotalIncomeDarkCard = ({ isLoading, total, title = 'Total Income' }) => {
                     <Box sx={{ p: 2 }}>
                         <List sx={{ py: 0 }}>
                             <ListItem alignItems="center" disableGutters sx={{ py: 0 }}>
-                                <ListItemAvatar>
-                                    <Avatar
-                                        variant="rounded"
-                                        sx={{
-                                            ...theme.typography.commonAvatar,
-                                            ...theme.typography.largeAvatar,
-                                            backgroundColor: theme.palette.primary[800],
-                                            color: '#fff'
-                                        }}
-                                    >
-                                        <TableChartOutlinedIcon fontSize="inherit" />
-                                    </Avatar>
-                                </ListItemAvatar>
                                 <ListItemText
                                     sx={{
                                         py: 0,
                                         mt: 0.45,
-                                        mb: 0.45
+                                        mb: 0.45,
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        alignItems: 'center',
+                                        justifyContent: 'center'
                                     }}
                                     primary={
-                                        <Typography variant="h2" sx={{ color: '#fff' }}>
+                                        <Typography variant="h1" sx={{ color: '#fff' }}>
                                             Rs. {numeral(total).format('0,0')}
                                         </Typography>
                                     }
                                     secondary={
-                                        <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
+                                        <Typography variant="h2" sx={{ color: 'primary.light', mt: 0.25 }}>
                                             {title}
                                             {/* <p>{numberToWords.toWords(total)}</p> */}
                                         </Typography>
@@ -95,8 +85,8 @@ const TotalIncomeDarkCard = ({ isLoading, total, title = 'Total Income' }) => {
     );
 };
 
-TotalIncomeDarkCard.propTypes = {
+RemainingProfitCard.propTypes = {
     isLoading: PropTypes.bool
 };
 
-export default TotalIncomeDarkCard;
+export default RemainingProfitCard;
