@@ -12,7 +12,7 @@ import { useNavigate } from 'react-router';
 import { useEffect } from 'react';
 
 const initialValues = {
-    spentBy: '',
+    spentBy: 'company',
     paymentMethod: '',
     tid: '',
     amount: '',

@@ -15,6 +15,7 @@ const IspGrandSummaryCard = ({ isLoading, data }) => {
     const cardItem = { zIndex: 10 };
     const numberStyle = { fontSize: 24, fontWeight: 'bold' };
     const nameStyle = { fontSize: 34, fontWeight: 'bold' };
+    const textStyle = { fontSize: 18 };
 
     const CardWrapper = styled(MainCard)(({ theme }) => ({
         backgroundColor: data?.isp?.color,
@@ -76,7 +77,7 @@ const IspGrandSummaryCard = ({ isLoading, data }) => {
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Total Income</Typography>
+                                    <Typography style={textStyle}>Total Income</Typography>
                                 </Grid>
                             </Grid>
                             <Grid item sx={cardItem} xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -88,7 +89,7 @@ const IspGrandSummaryCard = ({ isLoading, data }) => {
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Total Invoice</Typography>
+                                    <Typography style={textStyle}>Total Invoice</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -102,7 +103,7 @@ const IspGrandSummaryCard = ({ isLoading, data }) => {
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Total Profit</Typography>
+                                    <Typography style={textStyle}>Total Profit</Typography>
                                 </Grid>
                             </Grid>
                             <Grid item sx={cardItem} xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -114,7 +115,7 @@ const IspGrandSummaryCard = ({ isLoading, data }) => {
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Invoice Sent</Typography>
+                                    <Typography style={textStyle}>Invoice Sent</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>
@@ -128,7 +129,7 @@ const IspGrandSummaryCard = ({ isLoading, data }) => {
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Total Balance</Typography>
+                                    <Typography style={textStyle}>Total Balance</Typography>
                                 </Grid>
                             </Grid>
                             <Grid item sx={cardItem} xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -140,7 +141,7 @@ const IspGrandSummaryCard = ({ isLoading, data }) => {
                                     </Grid>
                                 </Grid>
                                 <Grid item>
-                                    <Typography>Total Pending</Typography>
+                                    <Typography style={textStyle}>Total Pending</Typography>
                                 </Grid>
                             </Grid>
                         </Grid>

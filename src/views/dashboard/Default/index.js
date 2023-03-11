@@ -9,19 +9,30 @@ import { gridSpacing } from 'store/constant';
 import IspGrandSummaryCard from './IspGrandSummaryCard';
 import jwt from 'jwtservice/jwtService';
 import RemainingProfitCard from './RemainingProfitCard';
+import PartnerGrandSummaryCard from './PartnerGrandSummaryCard';
 
 // ==============================|| DEFAULT DASHBOARD ||============================== //
+
+const MyDivider = () => {
+    return (
+        <div
+            style={{ width: '100%', height: '1.5px', backgroundColor: '#BEBEBE', borderRadius: '20px', margin: '30px 10px 10px 30px' }}
+        ></div>
+    );
+};
 
 const Dashboard = () => {
     const [isLoading, setLoading] = useState(false);
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth() + 1);
     const [ispsData, setIspsData] = useState([]);
+    const [partnersExpenses, setPartnersExpenses] = useState([]);
     const [totalIncome, setTotalIncome] = useState(0);
     const [companyExpense, setCompanyExpense] = useState(0);
     const [companyProfit, setCompanyProfit] = useState(0);
-    const [partnersExpense, setPartnersExpense] = useState(0);
+    const [partnersTotalExpense, setPartnersTotalExpense] = useState(0);
     const [totalRemainingProfit, setTotalRemainingProfit] = useState(0);
+    const [totalPendingAmount, setTotalPendingAmount] = useState(0);
 
     const startYear = 2020;
     const currentYear = new Date().getFullYear();
@@ -37,17 +48,17 @@ const Dashboard = () => {
         setLoading(true);
         jwt.getSummary({ month, year })
             .then((res) => {
-                console.log(res);
-                setIspsData(res?.data?.data);
+                setIspsData(res?.data?.ispsData);
+                setPartnersExpenses(res?.data?.partnersExpenses);
                 setTotalIncome(res?.data?.totalIncome);
                 setCompanyExpense(res?.data?.companyExpense);
                 setCompanyProfit(res?.data?.companyProfit);
-                setPartnersExpense(res?.data?.partnersExpense);
+                setPartnersTotalExpense(res?.data?.partnersTotalExpense);
                 setTotalRemainingProfit(res?.data?.totalRemainingProfit);
+                setTotalPendingAmount(res?.data?.totalPendingAmount);
                 setLoading(false);
             })
             .catch((err) => {
-                console.log(err);
                 setLoading(false);
             });
     };
@@ -102,6 +113,7 @@ const Dashboard = () => {
                             </Grid>
                         ))}
                     </>
+                    <MyDivider />
                     <Grid container item spacing={2}>
                         <Grid item sm={3} xs={3} md={3} lg={3}>
                             <TotalIncomeDarkCard isLoading={isLoading} title="Total Income" total={totalIncome} />
@@ -113,7 +125,17 @@ const Dashboard = () => {
                             <TotalIncomeDarkCard isLoading={isLoading} title="Company Profit" total={companyProfit} />
                         </Grid>
                         <Grid item sm={3} xs={3} md={3} lg={3}>
-                            <TotalIncomeDarkCard isLoading={isLoading} title="Partners Expense" total={partnersExpense} />
+                            <TotalIncomeDarkCard isLoading={isLoading} title="Partners Expense" total={partnersTotalExpense} />
+                        </Grid>
+                    </Grid>
+                    <Grid container item spacing={2}>
+                        <Grid item sm={12} xs={12} md={3} lg={12}>
+                            <RemainingProfitCard
+                                color="green"
+                                isLoading={isLoading}
+                                title="Total Remaining Profit"
+                                total={totalRemainingProfit}
+                            />
                         </Grid>
                     </Grid>
                     <Grid container item spacing={2}>
@@ -121,11 +143,19 @@ const Dashboard = () => {
                             <RemainingProfitCard
                                 color="red"
                                 isLoading={isLoading}
-                                title="Total Remaining Profit"
-                                total={totalRemainingProfit}
+                                title="Total Pending Amount"
+                                total={totalPendingAmount}
                             />
                         </Grid>
                     </Grid>
+                    <MyDivider />
+                    <>
+                        {partnersExpenses.map((data, index) => (
+                            <Grid key={index} item xl={3} lg={4} md={4} sm={6} xs={12}>
+                                <PartnerGrandSummaryCard isLoading={isLoading} data={data} />
+                            </Grid>
+                        ))}
+                    </>
                 </Grid>
             </Grid>
         </Grid>

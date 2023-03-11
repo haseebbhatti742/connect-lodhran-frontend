@@ -13,6 +13,7 @@ import TableChartOutlinedIcon from '@mui/icons-material/TableChartOutlined';
 import { THEME_COLOR_DARK } from 'utils/Constants';
 import numeral from 'numeral';
 import numberToWords from 'number-to-words';
+import { capitalize } from 'utils/Functions';
 
 // styles
 const CardWrapper = styled(MainCard)(({ theme }) => ({
@@ -68,24 +69,23 @@ const TotalIncomeDarkCard = ({ isLoading, total, title = 'Total Income' }) => {
                                         <TableChartOutlinedIcon fontSize="inherit" />
                                     </Avatar>
                                 </ListItemAvatar>
-                                <ListItemText
+                                <Box
                                     sx={{
                                         py: 0,
                                         mt: 0.45,
                                         mb: 0.45
                                     }}
-                                    primary={
-                                        <Typography variant="h2" sx={{ color: '#fff' }}>
-                                            Rs. {numeral(total).format('0,0')}
-                                        </Typography>
-                                    }
-                                    secondary={
-                                        <Typography variant="subtitle2" sx={{ color: 'primary.light', mt: 0.25 }}>
-                                            {title}
-                                            {/* <p>{numberToWords.toWords(total)}</p> */}
-                                        </Typography>
-                                    }
-                                />
+                                >
+                                    <Typography variant="h2" sx={{ color: '#fff' }}>
+                                        Rs. {numeral(total).format('0,0')}
+                                    </Typography>{' '}
+                                    <Typography variant="subtitle1" sx={{ color: 'primary.light' }}>
+                                        {capitalize(numberToWords.toWords(total))}
+                                    </Typography>
+                                    <Typography variant="subtitle1" sx={{ color: 'primary.light', mt: 0.25 }}>
+                                        {title}
+                                    </Typography>
+                                </Box>
                             </ListItem>
                         </List>
                     </Box>
